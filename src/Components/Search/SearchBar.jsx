@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { useEffect } from "react";
 import "./SearchBar.css";
-import { set } from "mongoose";
 
 export default function SearchBar(props) {
   const [input, setInput] = useState("");
