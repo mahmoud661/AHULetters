@@ -21,6 +21,7 @@ export default function LetterContainer({ tags, sortTag , collageTag, Department
 
   // Function to filter letters based on tags
 const filterLetters = () => {
+  
   return letters
     .filter((letter) => {
       // If tags array is empty, return true for all letters
@@ -64,6 +65,7 @@ const filterLetters = () => {
       // If collageTags and departmentTags are empty, return true for all letters
       return true;
     });
+    
 };
 
 
@@ -109,8 +111,10 @@ const filterLetters = () => {
 
   // Effect to reset current section when tags change
   useEffect(() => {
+    // Reset the current section to 1 whenever any of the filtering or sorting props change
     setCurrentSection(1);
-  }, [tags]);
+  }, [tags, sortTag, collageTag, DepartmentTag]);
+
 
   // Function to generate section buttons for the current group of sections
   const renderSectionButtons = () => {
@@ -139,6 +143,7 @@ const filterLetters = () => {
 
   return (
     <div className="main_contanier">
+      <h1 style={{ color: "#e0af14" }}>Thesis</h1>
       <div className="letter_contanier">
         {sortedLetters
           .slice(
