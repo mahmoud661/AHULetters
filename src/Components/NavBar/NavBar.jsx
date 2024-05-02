@@ -23,7 +23,7 @@ function Navbar() {
               src={LogoE}
               alt="Alhussain bin Talal university"
             />
-            Research letters
+            Thesis Archive
           </div>
           <ul className={`navMenu ${isActive ? "active" : ""}`}>
             <li onClick={removeActive}>
