@@ -1,0 +1,56 @@
+/* app.css */
+html{scroll-behavior: smooth;}
+::-webkit-scrollbar-track {
+  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+  border-radius: 10px;
+  background: none;
+}
+
+::-webkit-scrollbar {
+  width: 7px;
+  background: none;
+  transition: all 0.5s;
+}
+
+::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+  background-color: #e0af14;
+}
+::-webkit-scrollbar-thumb:hover {
+  background-color: #e0af14;
+
+}
+body{
+    font-family: Arial, Helvetica, sans-serif;
+    overflow-x: hidden;
+    background: rgb(243, 243, 243);
+    scroll-behavior: smooth;
+}
+::selection {
+   color: #000000;
+
+  background: #e0af14;
+}
+.page{
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  position: relative;
+}
+.animate {
+  opacity: 1;
+  transform: translatex(0);
+}
+.scroll-animation-container_right {
+  opacity: 0;
+
+  transform: translatex(-20px);
+  transition: opacity 0.5s, transform 0.8s;
+}
+.scroll-animation-container {
+  opacity: 0;
+  transform: translatex(20px);
+  transition: opacity 0.3s, transform 0.8s;
+}
+

@@ -1,0 +1,257 @@
+.main_contanier{
+  display: flex;
+  flex-direction:column ;
+  gap: 30px;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+  min-height: 50vh;
+}
+.section_navigation{
+  margin: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+}
+.section_btn {
+ position: relative;
+ font-size: 17px;
+ text-transform: uppercase;
+ text-decoration: none;
+ padding: 1em ;
+ display: inline-block;
+ border-radius: 6em;
+ transition: all .2s;
+ border: none;
+ font-family: inherit;
+ font-weight: 500;
+ color: black;
+ background-color: white;
+}
+
+.section_btn:hover {
+ transform: translateY(-3px);
+ box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+}
+
+.section_btn:active {
+ transform: translateY(-1px);
+ box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+}
+
+.section_btn::after {
+ content: "";
+ display: inline-block;
+ height: 100%;
+ width: 100%;
+ border-radius: 100px;
+ position: absolute;
+ top: 0;
+ left: 0;
+ z-index: -1;
+ transition: all .4s;
+}
+
+.section_btn::after {
+ background-color: #fff;
+}
+
+.section_btn:hover::after {
+ transform: scaleX(1.4) scaleY(1.6);
+ opacity: 0;
+}
+.section_active{
+  background-color: #e0af14;
+  color: white;
+ box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+  
+}
+.letter_contanier {
+  background-color: white;
+  min-width: 80%;
+  margin-left: 10%;
+  margin-right: 10%;
+  border-radius: 30px;
+  box-shadow: rgba(0, 0, 0, 0.3) 0px 18px 26px -18px inset;
+  display: flex;
+  flex-wrap: wrap;
+  padding: 20px;
+  padding-top: 40px;
+  gap: 30px;
+  justify-content: center;
+
+  
+}
+.card {
+  max-width: 320px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+ border: 1px solid white;
+   border-radius: 0.5rem;
+  padding: 1rem;
+  background-color: #ececec;
+  transition: all 0.3s ease-in-out;
+}
+.card:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0.5rem 1rem rgba(17, 24, 39, 0.1);
+  border: 1px solid black;
+}
+.letter {
+  width: fit-content;
+  height: fit-content;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  grid-gap: 1rem;
+  gap: 1rem;
+}
+
+.title {
+  font-size: 1rem;
+  line-height: 1.25rem;
+  font-weight: 700;
+  color: rgba(17, 24, 39, 1);
+  text-decoration: none;
+}
+
+.title:hover {
+  text-decoration: underline royalblue;
+}
+
+.name {
+  margin-top: 0.25rem;
+  font-size: 0.75rem;
+  line-height: 1rem;
+  font-weight: 500;
+  color: rgba(75, 85, 99, 1);
+}
+
+.image {
+  display: block;
+  flex-shrink: 0;
+  height: 3rem;
+  width: 3rem;
+  border-radius: 0.5rem;
+  object-fit: cover;
+  background-color: royalblue;
+}
+
+.description {
+  margin-top: 1rem;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  color: rgba(107, 114, 128, 1);
+}
+
+.post-info {
+  margin-top: 1.5rem;
+  display: flex;
+  grid-gap: 1rem;
+  gap: 1rem;
+}
+
+.cr {
+  display: flex;
+  flex-direction: column-reverse;
+}
+
+.dt {
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  font-weight: 600;
+  color: rgba(75, 85, 99, 1);
+}
+
+.dd {
+  font-size: 0.75rem;
+  line-height: 1rem;
+  color: rgba(107, 114, 128, 1);
+}
+
+
+
+.btn-conteiner {
+  display: flex;
+  justify-content: center;
+  --color-text: #e0af14;
+  --color-background: #353535;
+  --color-outline: #e0af14;
+  --color-shadow: #00000080;
+  
+}
+
+.btn-content {
+  display: flex;
+  align-items: center;
+  padding: 0px 3px;
+  text-decoration: none;
+  font-family: "Poppins", sans-serif;
+  font-size: 25px;
+  color: var(--color-text);
+  background: var(--color-background);
+  transition: 1s;
+  border-radius: 100px;
+  box-shadow: 0 0 0.2em 0 var(--color-background);
+}
+
+
+
+.btn-content .icon-arrow {
+  transition: 0.5s;
+  margin-right: 0px;
+  transform: scale(0.6);
+}
+
+
+
+.icon-arrow {
+  width: 20px;
+  margin-left: 15px;
+  position: relative;
+  top: 6%;
+}
+.left-arrow {
+  transform: rotate(180deg);
+}
+
+/* SVG */
+#arrow-icon-one {
+  transition: 0.4s;
+}
+
+#arrow-icon-two {
+  transition: 0.5s;
+}
+
+.btn-content:hover  {
+  box-shadow: 0 0.5rem 1rem rgba(17, 24, 39, 0.1);
+}
+
+
+
+
+@media (max-width: 600px) {
+  .section_navigation{
+      margin: 5px;
+
+  }
+  .btn-content {
+    font-size: 20px; /* Adjust font size */
+    padding: 0; /* Adjust padding */
+  }
+  .letter_contanier{
+    
+    margin-left: 3px;
+    margin-right: 3px;
+    background-color: rgba(252, 18, 18, 0);
+    padding: 0px;
+    box-shadow: none;
+  }
+}

@@ -1,0 +1,258 @@
+/* SearchBar.css */
+@keyframes slideIn {
+  from {
+    transform: translateY(-100%);
+  }
+  to {
+    transform: translateY(0);
+
+  }
+}
+
+@keyframes slideOut {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(0);
+    
+  }
+}
+
+.Search_Bar{
+    position: relative;
+    flex-direction: column;
+    background-color: #dadada;
+    padding: 5px;
+   animation: slideOut 0.3s ease-in-out forwards; /* Animation to slide in */
+  transition: transform 0.3s ease-in-out; /* Smooth transition for the transform property */
+}
+.visible {
+  display: flex;
+  animation: slideIn 0.3s ease-in-out forwards; /* Animation to slide in */
+}
+.hidden {
+      animation: slideOut 0.3s ease-in-out forwards; /* Animation to slide in */
+      display: none;
+}
+.btnIn{
+  animation: slideIn 0.3s ease-in-out forwards;
+}
+.btnOut{
+        animation: slideOut 0.3s ease-in-out forwards; /* Animation to slide in */
+
+}
+.Search_filter {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  margin-left: 50px;
+   margin-right: 20px;
+ 
+}
+
+.filter-button {
+  padding: 5px;
+}
+.filter_btn {
+  --clr-font-main: hsla(0 0% 20% / 100);
+  --btn-bg-1: hsla(360 100% 100% / 1);
+  --btn-bg-2: #e0af14;
+  --btn-bg-color: hsla(360 100% 100% / 1);
+  --radii: 0.5em;
+  cursor: pointer;
+  padding: 5px;
+ 
+  font-size: var(--size, 1rem);
+ 
+  font-weight: 500;
+  transition: 0.8s;
+  background-size: 280% auto;
+  background-image: linear-gradient(325deg, var(--btn-bg-2) 0%, var(--btn-bg-1) 55%, var(--btn-bg-2) 90%);
+  border: none;
+  border-radius: var(--radii);
+  
+}
+
+.filter_btn:hover {
+  background-position: right top;
+}
+
+
+
+@media (prefers-reduced-motion: reduce) {
+  .filter_btn {
+    transition: linear;
+  }
+}
+
+.selected {
+    
+  outline: none;
+  box-shadow: 0 0 0 3px var(--btn-bg-color), 0 0 0 6px var(--btn-bg-2);
+}
+
+.Search_filter select {
+  padding: 5px;
+}
+
+
+.Search_tag{
+    display: flex;
+    gap: 20px;
+ margin-left: 50px;
+   margin-right: 20px;
+   
+    
+}
+.input-wrapper {
+   
+  display: flex;
+ 
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+max-width: fit-content;
+position: relative;
+}
+
+.input_search {
+  
+  border-style: none;
+  height: 50px;
+  width: 50px;
+  padding: 10px;
+  outline: none;
+  border-radius: 50%;
+  transition: 0.5s ease-in-out;
+ 
+  box-shadow: 0px 0px 3px #e0af14;
+  padding-right: 40px;
+  
+ 
+}
+
+.input_search::placeholder,
+.input_search {
+
+  font-size: 17px;
+}
+
+.input_search::placeholder {
+  color: #8f8f8f;
+}
+
+.icon {
+  
+  display: flex;
+  align-items: center;
+  justify-content: center;
+position: absolute;
+right: 0;
+  cursor: pointer;
+  width: 50px;
+  height: 50px;
+  outline: none;
+  border-style: none;
+  border-radius: 50%;
+  pointer-events: painted;
+  background-color: transparent;
+  transition: 0.2s linear;
+}
+
+.icon:focus ~ .input_search,
+.input_search:focus {
+  box-shadow: none;
+  width: 250px;
+  border-radius: 0px;
+  background-color: transparent;
+  border-bottom: 3px solid #e0af14;
+  transition: all 500ms cubic-bezier(0, 0.11, 0.35, 2);
+}
+
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  margin-top: 10px;
+}
+
+.tag {
+    display: flex;
+   
+justify-content: center;
+align-items: center;
+align-content: center;
+  background-color: #eee;
+  border-radius: 20px;
+  padding: 8px;
+  margin-right: 5px;
+  margin-bottom: 5px;
+  gap: 8px;
+}
+.delete-icon {
+  background: none;
+  border: none;
+  cursor: pointer;
+ 
+}
+.delete-icon:hover {
+  color: red;
+ 
+}
+.clear-all {
+  background: none;
+  border: none;
+  cursor: pointer;
+  margin-left: 5px;
+}
+
+.searchButton{
+  border: solid 12px #dadada;
+  background-color: #dadada;
+  margin-top: 0;
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+  font-size: 20px; /* Adjust the font size to make the arrow bigger */
+  transition: all 0.5s ease-in-out;
+}
+.searchButton:hover{
+  cursor: pointer;
+   border: solid 12px #cecece;
+  background-color: #cecece;
+}
+/* CSS for the arrow icon */
+.searchButton::after {
+  content: "";
+  display: inline-block;
+  margin-left: 5px; /* Adjust spacing as needed */
+}
+
+.down::after {
+  content: "↑"; /* Down arrow */
+}
+
+.up::after {
+  content: "↓"; /* Up arrow */
+  
+}
+
+@media screen and (max-width: 600px) {
+.Search_tag{
+    flex-direction: column;
+}
+.Search_filter{
+  margin-left: 3px;
+  margin-right: 3px;
+}
+.Search_tag{
+    
+ margin-left: 3px;
+   margin-right: 2px;
+   
+    
+}
+
+}
