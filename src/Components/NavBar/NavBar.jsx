@@ -19,6 +19,8 @@ function Navbar() {
           {/* logo */}
           <div href="#home" className={`logo`}>
             <img
+            height={"30px"}
+            width={"30px"}
               className={`logo`}
               src={LogoE}
               alt="Alhussain bin Talal university"

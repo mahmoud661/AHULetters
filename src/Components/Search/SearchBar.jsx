@@ -5,9 +5,7 @@ import "./SearchBar.css";
 export default function SearchBar(props) {
   const [input, setInput] = useState("");
   const [tags, setTags] = useState([]);
-  const [filter, setFilter] = useState("");
   const [selectedFilters, setSelectedFilters] = useState("");
-  const [sortTag, setSortTag] = useState([]);
 
   const [collegeTag, setCollegeTag] = useState("");
   const [departmentTag, setDepartmentTag] = useState("");
@@ -61,7 +59,6 @@ export default function SearchBar(props) {
     props.onTagsChange([]);
   };
   const handleClearfilter = () => {
-    setFilter("");
    
     setCollegeTag("");
     setDepartmentTag("");
@@ -76,7 +73,6 @@ export default function SearchBar(props) {
     }
   };
   const handleClearSort = () => {
-    setFilter("");
     setSelectedFilters("");
    
   };

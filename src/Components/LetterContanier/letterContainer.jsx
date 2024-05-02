@@ -5,8 +5,13 @@ import ScrollAnimation from "../scrollanimate.jsx";
 
 // Function to remove diacritics from Arabic text
 const removeDiacritics = (text) => {
-  return text.normalize("NFD").replace(/[\u064B-\u065F]/g, "");
+  if (!text) return "";
+  // Check if text is not null or undefined before calling normalize
+  return text.normalize
+    ? text.normalize("NFD").replace(/[\u064B-\u065F]/g, "")
+    : text;
 };
+
 
 export default function LetterContainer({ tags, sortTag , collageTag, DepartmentTag}) {
   const [letters, setLetters] = useState(data);
@@ -15,52 +20,52 @@ export default function LetterContainer({ tags, sortTag , collageTag, Department
   const sectionsPerPage = 5;
 
   // Function to filter letters based on tags
- const filterLetters = () => {
-   return letters
-     .filter((letter) => {
-       // If tags array is empty, return true for all letters
-       if (tags.length === 0) {
-         return true;
-       }
-       // Check if all tags are included in the letter properties
-       return tags.every((tag) =>
-         Object.values(letter).some((value) => {
-           // Convert numbers to strings for comparison
-           const stringValue = String(value);
-           // Remove diacritics from both tag and value before comparison
-           const normalizedTag = removeDiacritics(tag);
-           const normalizedValue = removeDiacritics(stringValue);
-           return normalizedValue
-             .toLowerCase()
-             .includes(normalizedTag.toLowerCase());
-         })
-       );
-     })
-     .filter((letter) => {
-       // Filter based on collage if collageTags is not empty
-       if ((collageTag.length > 0 || collageTag !== "") && collageTag !== "empty") {
-
+const filterLetters = () => {
+  return letters
+    .filter((letter) => {
+      // If tags array is empty, return true for all letters
+      if (tags.length === 0) {
+        return true;
+      }
+      // Check if all tags are included in the letter properties
+      return tags.every((tag) =>
+        Object.values(letter).some((value) => {
+          // Convert numbers to strings for comparison
+          const stringValue = String(value);
+          // Remove diacritics from both tag and value before comparison
+          const normalizedTag = removeDiacritics(tag);
+          const normalizedValue = removeDiacritics(stringValue);
+          return normalizedValue.toLowerCase() === normalizedTag.toLowerCase(); // Changed here
+        })
+      );
+    })
+    .filter((letter) => {
+      // Filter based on collage if collageTags is not empty
+      if (
+        (collageTag.length > 0 || collageTag !== "") &&
+        collageTag !== "empty"
+      ) {
         const normalizedTag = removeDiacritics(collageTag);
         const normalizedValue = removeDiacritics(letter.collage);
-        return normalizedTag
-          .toLowerCase()
-          .includes(normalizedValue.toLocaleLowerCase());
-        
-       }
-       return true; })
+        return normalizedValue.toLowerCase() === normalizedTag.toLowerCase(); // Changed here
+      }
+      return true;
+    })
+    .filter((letter) => {
+      // Filter based on department if departmentTags is not empty
+      if (
+        (DepartmentTag.length > 0 || DepartmentTag !== "") &&
+        DepartmentTag !== "empty"
+      ) {
+        const normalizedTag = removeDiacritics(DepartmentTag);
+        const normalizedValue = removeDiacritics(letter.dept);
+        return normalizedValue.toLowerCase() === normalizedTag.toLowerCase(); // Changed here
+      }
+      // If collageTags and departmentTags are empty, return true for all letters
+      return true;
+    });
+};
 
-       .filter((letter) => {
-       // Filter based on department if departmentTags is not empty
-       if ((DepartmentTag.length > 0 || DepartmentTag !== "") && DepartmentTag !== "empty") {
-
-          const normalizedTag = removeDiacritics(DepartmentTag);
-          const normalizedValue = removeDiacritics(letter.dept);
-         return normalizedTag.toLowerCase().includes(normalizedValue.toLocaleLowerCase());
-       }
-       // If collageTags and departmentTags are empty, return true for all letters
-       return true;})
-    
- };
 
 
   // Function to sort letters based on sortTag

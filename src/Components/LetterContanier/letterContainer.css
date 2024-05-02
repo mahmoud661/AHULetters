@@ -119,10 +119,11 @@
   font-weight: 700;
   color: rgba(17, 24, 39, 1);
   text-decoration: none;
+  transition: all 0.3s ease-in-out;
 }
 
 .title:hover {
-  text-decoration: underline royalblue;
+  text-decoration: underline #e0af14;
 }
 
 .name {
