@@ -1,0 +1,29 @@
+.about_main_div{
+    display: flex;
+    flex-direction: column;
+    gap: 150px;
+    padding: 50px;
+    margin: 10px;
+    min-height: 400px;
+}
+
+.about_child{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 50px;
+    justify-content: center;
+    align-items: center;
+}
+.about_image{
+    background-color: #6a4c7c;
+    border-radius: 22% 78% 50% 50% / 50% 42% 58% 50%  ;
+    flex: 6;
+}
+.about_para{
+    flex: 6;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    justify-content: center;
+    align-items: center;
+}

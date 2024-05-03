@@ -28,7 +28,7 @@
  font-family: inherit;
  font-weight: 500;
  color: black;
- background-color: white;
+ background-color: rgb(240, 240, 240);
 }
 
 .section_btn:hover {
@@ -85,21 +85,30 @@
   
 }
 .card {
+  
   max-width: 320px;
   position: relative;
   display: flex;
   flex-direction: column;
   overflow: hidden;
- border: 1px solid white;
-   border-radius: 0.5rem;
+  background-color: #f9f9f9;
+  border: 1px solid white;
+  border-radius: 0.5rem;
   padding: 1rem;
-  background-color: #ececec;
   transition: all 0.3s ease-in-out;
+  /* Add background image */
+  background-image: url('../../Images/Logo2.png');
+background-position: calc(100% + 110px) calc(100% + 100px);
+   background-size: 300px; /* Adjust the size as needed */
+  background-repeat: no-repeat;
+  /* Apply grayscale filter */
+ 
 }
+
 .card:hover {
   transform: scale(1.05);
   box-shadow: 0 0.5rem 1rem rgba(17, 24, 39, 0.1);
-  border: 1px solid black;
+  border: 1px solid #e0af14;
 }
 .letter {
   width: fit-content;
@@ -167,13 +176,13 @@
   font-size: 0.875rem;
   line-height: 1.25rem;
   font-weight: 600;
-  color: rgba(75, 85, 99, 1);
+  color: rgb(17, 19, 22);
 }
 
 .dd {
   font-size: 0.75rem;
   line-height: 1rem;
-  color: rgba(107, 114, 128, 1);
+  color: rgb(45, 48, 54);
 }
 
 
@@ -255,4 +264,12 @@
     padding: 0px;
     box-shadow: none;
   }
+}
+
+.empty-message{
+
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #000000;
+  margin-top: 20px;
 }

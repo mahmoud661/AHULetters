@@ -2,6 +2,7 @@ import "./letterContainer.css";
 import { useState, useEffect } from "react";
 import data from "../../data.js";
 import ScrollAnimation from "../scrollanimate.jsx";
+import { Link } from "react-router-dom";
 
 // Function to remove diacritics from Arabic text
 const removeDiacritics = (text) => {
@@ -14,7 +15,7 @@ const removeDiacritics = (text) => {
 
 
 export default function LetterContainer({ tags, sortTag , collageTag, DepartmentTag}) {
-  const [letters, setLetters] = useState(data);
+  const [letters] = useState(data);
   const lettersPerPage = 27;
   const [currentSection, setCurrentSection] = useState(1);
   const sectionsPerPage = 5;
@@ -145,51 +146,58 @@ const filterLetters = () => {
     <div className="main_contanier">
       <h1 style={{ color: "#e0af14" }}>Thesis</h1>
       <div className="letter_contanier">
-        {sortedLetters
-          .slice(
-            (currentSection - 1) * lettersPerPage,
-            currentSection * lettersPerPage
-          )
-          .map((letter, index) => {
-            return (
-              <ScrollAnimation
-                key={index}
-                direction={index % 2 === 0 ? "_right" : null}
-              >
-                <div className="letter" key={index}>
-                  <div className="card">
-                    <div className="header">
-                      <div>
-                        <a className="title" href="#d">
-                          {letter["letter Topic"]}
-                        </a>
-                        <p className="name"> {letter.researcher}</p>
+        {sortedLetters.length === 0 ? (
+          <div className="empty-message">No thesis found</div>
+        ) : (
+          sortedLetters
+            .slice(
+              (currentSection - 1) * lettersPerPage,
+              currentSection * lettersPerPage
+            )
+            .map((letter, index) => {
+              return (
+                <ScrollAnimation
+                  key={index}
+                  direction={index % 2 === 0 ? "_right" : null}
+                >
+                  <div className="letter" key={index}>
+                    <div className="card">
+                      <div className="header">
+                        <div>
+                          <Link
+                            to={`/thesis/${letter.researcher}`}
+                            className="title"
+                          >
+                            {letter["letter Topic"]}
+                          </Link>
+                          <p className="name">{letter.researcher}</p>
+                        </div>
                       </div>
+                      <div className="description">
+                        <div>الكلية: {letter.collage}</div>
+                        <div>التخصص: {letter.dept}</div>
+                        <div>المشرف: {letter.super}</div>
+                      </div>
+                      <dl className="post-info">
+                        <div className="cr">
+                          <dd className="dd">{letter.year}</dd>
+                          <dt className="dt">Published</dt>
+                        </div>
+                        <div className="cr">
+                          <dd className="dd">{letter.type}</dd>
+                          <dt className="dt">Type</dt>
+                        </div>
+                        <div className="cr">
+                          <dd className="dd">EN</dd>
+                          <dt className="dt">Language</dt>
+                        </div>
+                      </dl>
                     </div>
-                    <div className="description">
-                      <div>الكلية : {letter.collage}</div>
-                      <div>التخصص : {letter.dept}</div>
-                      <div> المشرف : {letter.super}</div>
-                    </div>
-                    <dl className="post-info">
-                      <div className="cr">
-                        <dd className="dd"> {letter.year}</dd>
-                        <dt className="dt">Published</dt>
-                      </div>
-                      <div className="cr">
-                        <dd className="dd"> {letter.type}</dd>
-                        <dt className="dt">Type</dt>
-                      </div>
-                      <div className="cr">
-                        <dd className="dd"> EN</dd>
-                        <dt className="dt">language</dt>
-                      </div>
-                    </dl>
                   </div>
-                </div>
-              </ScrollAnimation>
-            );
-          })}
+                </ScrollAnimation>
+              );
+            })
+        )}
       </div>
       {/* Render section numbers for navigation */}
       <div className="section_navigation">
