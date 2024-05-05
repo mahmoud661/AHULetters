@@ -1,5 +1,5 @@
 import data from "../../data";
-
+import "./SelectedThesis.css";
 export default function SelectedThesis({ ThesisId }) {
   const thesis = data.find((item) => item.researcher === ThesisId);
 
@@ -9,36 +9,80 @@ export default function SelectedThesis({ ThesisId }) {
   }
 
   return (
-    <div>
-      <div className="letter">
-        <div className="card">
-          <div className="header">
-            <div>
-              <a className="title" href="#d">
-                {thesis["letter Topic"]}
-              </a>
-              <p className="name"> {thesis.researcher}</p>
+    <div className="Thesis1_main">
+      <div className="Thesis1  ">
+        <div className="Thesis_title title">{thesis["letter Topic"]}</div>
+        <div className="Thesis_researcher column_align">
+          <div className="d_title">Researcher</div>
+          <div>{thesis.researcher}</div>
+        </div>
+        <div className="Thesis_Sup column_align">
+          <div className="d_title">Supervisor</div>
+          <div>{thesis.super}</div>
+        </div>
+        <div
+          className={`Thesis_CoSup ${
+            thesis.sub === null || "" ? "hidden" : ""
+          }`}
+        >
+          <div className="d_title">Co-supervisor</div>
+          <div>{thesis.sub}</div>
+        </div>
+        <div className="Thesis_Collage">
+          <div className="d_title">Collage</div>
+          <div>{thesis.collage}</div>
+        </div>
+        <div className="Thesis_Dept">
+          <div className="d_title">Department</div>
+          <div>{thesis.dept}</div>
+        </div>
+        <div className="Thesis_date">
+          <div className="thesis_year">
+            <div className="cr">
+              <dd className="dd">{thesis.year}</dd>
+              <dt className="dt">Year</dt>
             </div>
           </div>
-          <div className="description">
-            <div>الكلية : {thesis.collage}</div>
-            <div>التخصص : {thesis.dept}</div>
-            <div> المشرف : {thesis.super}</div>
-          </div>
-          <dl className="post-info">
+          <div className="Academic_year">
             <div className="cr">
-              <dd className="dd"> {thesis.year}</dd>
-              <dt className="dt">Published</dt>
+              <dd className="dd">2020-2021</dd>
+              <dt className="dt">Academic year</dt>
             </div>
+          </div>
+          <div className="semester">
             <div className="cr">
-              <dd className="dd"> {thesis.type}</dd>
+              <dd className="dd">First</dd>
+              <dt className="dt">Semester</dt>
+            </div>
+          </div>
+        </div>
+        <div className="TL">
+          <div className="type">
+            <div className="cr">
+              <dd className="dd">{thesis.type}</dd>
               <dt className="dt">Type</dt>
             </div>
+          </div>
+          <div className="thesis_lang">
             <div className="cr">
-              <dd className="dd"> EN</dd>
-              <dt className="dt">language</dt>
+              <dd className="dd">EN</dd>
+              <dt className="dt">Language</dt>
             </div>
-          </dl>
+          </div>
+        </div>
+        <div className="Thesis_pdf">
+          <button class="D_Btn">
+            <svg
+              class="svgIcon"
+              viewBox="0 0 384 512"
+              height="1em"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path d="M169.4 470.6c12.5 12.5 32.8 12.5 45.3 0l160-160c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L224 370.8 224 64c0-17.7-14.3-32-32-32s-32 14.3-32 32l0 306.7L54.6 265.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l160 160z"></path>
+            </svg>
+            <span class="icon2"></span>
+            <span class="tooltip_D">Download</span>
+          </button>
         </div>
       </div>
     </div>

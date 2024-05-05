@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from "react";
 import "./burger.css";
+import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 export default function Burger() {
   const [isChecked, setChecked] = useState(false);
+  const [t,i18n] = useTranslation();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -42,18 +45,27 @@ export default function Burger() {
             <div>
               <div className="navi_buttons">
                 {/* Add onClick event handler to each link */}
-                <a className="nav_btn" href="#start" onClick={handleLinkClick}>
-                  Home
-                </a>
-                <a className="nav_btn" href="#About" onClick={handleLinkClick}>
-                  About
-                </a>
+                <Link
+                  to={"/"}
+                  className="nav_btn"
+                  href="#start"
+                  onClick={handleLinkClick}
+                >
+                  {t("navbar1")}
+                </Link>
+                <Link
+                  to={"/About"}
+                  className="nav_btn"
+                  onClick={handleLinkClick}
+                >
+                  {t("navbar2")}
+                </Link>
                 <a
                   className="nav_btn"
                   href="#contact"
                   onClick={handleLinkClick}
                 >
-                  Contact
+                  {t("navbar3")}
                 </a>
               </div>
             </div>

@@ -129,6 +129,7 @@ background-position: calc(100% + 110px) calc(100% + 100px);
   color: rgba(17, 24, 39, 1);
   text-decoration: none;
   transition: all 0.3s ease-in-out;
+  cursor: pointer;
 }
 
 .title:hover {

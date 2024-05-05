@@ -3,7 +3,8 @@ import { useState, useEffect } from "react";
 import data from "../../data.js";
 import ScrollAnimation from "../scrollanimate.jsx";
 import { Link } from "react-router-dom";
-
+import { useTranslation } from "react-i18next";
+import Cookies from "js-cookie";
 // Function to remove diacritics from Arabic text
 const removeDiacritics = (text) => {
   if (!text) return "";
@@ -20,6 +21,9 @@ export default function LetterContainer({ tags, sortTag , collageTag, Department
   const [currentSection, setCurrentSection] = useState(1);
   const sectionsPerPage = 5;
 
+  const [t] = useTranslation();
+
+  const lang = Cookies.get("i18next");
   // Function to filter letters based on tags
 const filterLetters = () => {
   
@@ -144,10 +148,10 @@ const filterLetters = () => {
 
   return (
     <div className="main_contanier">
-      <h1 style={{ color: "#e0af14" }}>Thesis</h1>
+      <h1 style={{ color: "#e0af14" }}>{t("thesis")}</h1>
       <div className="letter_contanier">
         {sortedLetters.length === 0 ? (
-          <div className="empty-message">No thesis found</div>
+          <div className="empty-message">{t("No thesis found")}</div>
         ) : (
           sortedLetters
             .slice(
@@ -174,22 +178,28 @@ const filterLetters = () => {
                         </div>
                       </div>
                       <div className="description">
-                        <div>الكلية: {letter.collage}</div>
-                        <div>التخصص: {letter.dept}</div>
-                        <div>المشرف: {letter.super}</div>
+                        <div>
+                          {t("Collage")} {letter.collage}
+                        </div>
+                        <div>
+                          {t("Department")} {letter.dept}
+                        </div>
+                        <div>
+                          {t("Supervisor")} {letter.super}
+                        </div>
                       </div>
                       <dl className="post-info">
                         <div className="cr">
                           <dd className="dd">{letter.year}</dd>
-                          <dt className="dt">Published</dt>
+                          <dt className="dt">{t("Published")}</dt>
                         </div>
                         <div className="cr">
                           <dd className="dd">{letter.type}</dd>
-                          <dt className="dt">Type</dt>
+                          <dt className="dt">{t("Type")}</dt>
                         </div>
                         <div className="cr">
                           <dd className="dd">EN</dd>
-                          <dt className="dt">Language</dt>
+                          <dt className="dt">{t("Language")}</dt>
                         </div>
                       </dl>
                     </div>
@@ -202,7 +212,7 @@ const filterLetters = () => {
       {/* Render section numbers for navigation */}
       <div className="section_navigation">
         <div onClick={handlePrevSections} className="btn-conteiner">
-          <c className="btn-content left-arrow">
+          <c className={`btn-content ${lang === "en" ? "left-arrow" : ""}`}>
             <span className="icon-arrow">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -230,7 +240,7 @@ const filterLetters = () => {
         </div>
         {renderSectionButtons()}
         <div onClick={handleNextSections} className="btn-conteiner">
-          <c className="btn-content">
+          <c className={`btn-content ${lang === "ar" ? "left-arrow" : ""}`}>
             <span className="icon-arrow">
               <svg
                 xmlns="http://www.w3.org/2000/svg"

@@ -1,8 +1,10 @@
 import React, { useState } from "react";
 import { useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import "./SearchBar.css";
 
 export default function SearchBar(props) {
+  const [t,i18n] = useTranslation();
   const [input, setInput] = useState("");
   const [tags, setTags] = useState([]);
   const [selectedFilters, setSelectedFilters] = useState("");
@@ -109,7 +111,7 @@ export default function SearchBar(props) {
               type="text"
               name="text"
               className="input_search"
-              placeholder="search.."
+              placeholder={`${t("search")}..`}
               value={input}
               onChange={handleInputChange}
             />
@@ -137,13 +139,13 @@ export default function SearchBar(props) {
             ))}
             {tags.length > 0 && (
               <button className="clear-all" onClick={handleClearAll}>
-                Clear All
+                {t("Clear All")}
               </button>
             )}
           </div>
         </div>
         <div className="Search_filter">
-          <span>Filter by:</span>
+          <span>{t("Filter by")}:</span>
 
           <select
             id="departmentSelect"
@@ -152,7 +154,7 @@ export default function SearchBar(props) {
             }`}
             onChange={(e) => handleSelectChange(e, "department")}
           >
-            <option value="empty">Select department...</option>
+            <option value="empty">{t("Select department...")}</option>
             <option value="Department A">Department A</option>
             <option value="الرياضيات">الرياضيات</option>
             {/* Add more options as needed */}
@@ -164,7 +166,7 @@ export default function SearchBar(props) {
             }`}
             onChange={(e) => handleSelectChange(e, "college")}
           >
-            <option value={"empty"}>Select college...</option>
+            <option value={"empty"}>{t("Select college...")}</option>
             <option value="العلوم">العلوم</option>
             <option value="العلوم التربوية">العلوم التربوية</option>
             <option value="تكنولوجيا المعلومات">تكنولوجيا المعلومات</option>
@@ -184,26 +186,26 @@ export default function SearchBar(props) {
             }`}
             onChange={handleSelectChange}
           >
-            <option value="empty">Select supervisor...</option>
+            <option value="empty">{t("Select supervisor...")}</option>
             <option value="Supervisor 1">Supervisor 1</option>
             <option value="Supervisor 2">Supervisor 2</option>
             {/* Add more options as needed */}
           </select>
           {(collegeTag || departmentTag) && (
             <button className="clear-all" onClick={handleClearfilter}>
-              Clear
+              {t("Clear")}
             </button>
           )}
         </div>
         <div className="Search_filter">
-          <span>Sort by:</span>
+          <span>{t("Sort by")}:</span>
           <button
             className={`filter_btn ${
               selectedFilters.includes("alphabet") ? "selected" : ""
             }`}
             onClick={() => handleFilterChange("alphabet")}
           >
-            A-Z
+            {t("A-Z")}
           </button>
           <button
             className={`filter_btn ${
@@ -211,19 +213,19 @@ export default function SearchBar(props) {
             }`}
             onClick={() => handleFilterChange("year")}
           >
-            Year
+            {t("Year")}
           </button>
 
           {selectedFilters && (
             <button className="clear-all" onClick={handleClearSort}>
-              Clear
+              {t("Clear")}
             </button>
           )}
         </div>
       </div>
 
       <button className={"searchButton up"} onClick={toggleSearchVisibility}>
-        Search
+        {t("Search")}
       </button>
     </div>
   );

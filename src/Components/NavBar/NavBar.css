@@ -150,3 +150,12 @@
   transition-delay: 0.4s;
   color: aliceblue;
 }
+
+
+.language-selector{
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+}
+.language-selector:hover{
+  color: #e0af14;
+}
