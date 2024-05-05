@@ -33,6 +33,7 @@ const filterLetters = () => {
       if (tags.length === 0) {
         return true;
       }
+
       // Check if all tags are included in the letter properties
       return tags.every((tag) =>
         Object.values(letter).some((value) => {
@@ -41,7 +42,10 @@ const filterLetters = () => {
           // Remove diacritics from both tag and value before comparison
           const normalizedTag = removeDiacritics(tag);
           const normalizedValue = removeDiacritics(stringValue);
-          return normalizedValue.toLowerCase() === normalizedTag.toLowerCase(); // Changed here
+          
+          return normalizedValue
+            .toLowerCase()
+            .includes(normalizedTag.toLowerCase()); // Changed here
         })
       );
     })
@@ -165,7 +169,13 @@ const filterLetters = () => {
                   direction={index % 2 === 0 ? "_right" : null}
                 >
                   <div className="letter" key={index}>
-                    <div className="card">
+                    <div
+                      className={`card ${
+                        lang === "ar"
+                          ? "card_image_back_left"
+                          : "card_image_back_right"
+                      }`}
+                    >
                       <div className="header">
                         <div>
                           <Link
@@ -212,7 +222,7 @@ const filterLetters = () => {
       {/* Render section numbers for navigation */}
       <div className="section_navigation">
         <div onClick={handlePrevSections} className="btn-conteiner">
-          <c className={`btn-content ${lang === "en" ? "left-arrow" : ""}`}>
+          <div className={`btn-content ${lang === "en" ? "left-arrow" : ""}`}>
             <span className="icon-arrow">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -224,7 +234,7 @@ const filterLetters = () => {
                 <g
                   fill-rule="evenodd"
                   fill="none"
-                  stroke-width="1"
+                  strokeWidth="1"
                   stroke="none"
                   id="arrow"
                 >
@@ -236,11 +246,11 @@ const filterLetters = () => {
                 </g>
               </svg>
             </span>
-          </c>
+          </div>
         </div>
         {renderSectionButtons()}
         <div onClick={handleNextSections} className="btn-conteiner">
-          <c className={`btn-content ${lang === "ar" ? "left-arrow" : ""}`}>
+          <div className={`btn-content ${lang === "ar" ? "left-arrow" : ""}`}>
             <span className="icon-arrow">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -252,7 +262,7 @@ const filterLetters = () => {
                 <g
                   fill-rule="evenodd"
                   fill="none"
-                  stroke-width="1"
+                  strokeWidth="1"
                   stroke="none"
                   id="arrow"
                 >
@@ -264,7 +274,7 @@ const filterLetters = () => {
                 </g>
               </svg>
             </span>
-          </c>
+          </div>
         </div>
       </div>
     </div>

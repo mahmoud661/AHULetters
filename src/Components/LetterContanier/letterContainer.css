@@ -97,14 +97,21 @@
   padding: 1rem;
   transition: all 0.3s ease-in-out;
   /* Add background image */
-  background-image: url('../../Images/Logo2.png');
-background-position: calc(100% + 110px) calc(100% + 100px);
-   background-size: 300px; /* Adjust the size as needed */
+
   background-repeat: no-repeat;
   /* Apply grayscale filter */
  
 }
-
+.card_image_back_right{
+   background-image: url('../../Images/Logo2.png');
+background-position: calc(100% + 110px) calc(100% + 100px);
+   background-size: 300px; /* Adjust the size as needed */
+}
+.card_image_back_left{
+  background-image: url('../../Images/Logo2.png');
+background-position: calc(100% - 110px) calc(100% + 100px);
+   background-size: 300px; /* Adjust the size as needed */
+}
 .card:hover {
   transform: scale(1.05);
   box-shadow: 0 0.5rem 1rem rgba(17, 24, 39, 0.1);

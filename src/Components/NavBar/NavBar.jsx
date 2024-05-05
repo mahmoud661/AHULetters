@@ -70,11 +70,11 @@ window.document.dir = i18n.dir();
           <div className="language-selector">
             {i18n.language === "en" ? (
               <>
-                <span onClick={() => changeLanguage("ar")}>AR</span>
+                <span onClick={() => changeLanguage("ar")}>عربي</span>
               </>
             ) : (
               <>
-                <span onClick={() => changeLanguage("en")}>EN</span>
+                <span onClick={() => changeLanguage("en")}>English</span>
               </>
             )}
           </div>
