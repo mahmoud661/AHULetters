@@ -1,11 +1,12 @@
 import data from "../../data";
 import "./SelectedThesis.css";
+import { Translation, useTranslation } from "react-i18next";
 export default function SelectedThesis({ ThesisId }) {
   const thesis = data.find((item) => item.researcher === ThesisId);
-
+  const [t] = useTranslation();
   if (!thesis) {
     // Handle case when ThesisId doesn't match any Thesis
-    return <div>Thesis not found</div>;
+    return <div>{t("No thesis found")}</div>;
   }
 
   return (
@@ -13,11 +14,11 @@ export default function SelectedThesis({ ThesisId }) {
       <div className="Thesis1  ">
         <div className="Thesis_title title">{thesis["letter Topic"]}</div>
         <div className="Thesis_researcher column_align">
-          <div className="d_title">Researcher</div>
+          <div className="d_title">{t("Researcher")}</div>
           <div>{thesis.researcher}</div>
         </div>
         <div className="Thesis_Sup column_align">
-          <div className="d_title">Supervisor</div>
+          <div className="d_title">{t("Supervisorr")}</div>
           <div>{thesis.super}</div>
         </div>
         <div
@@ -25,34 +26,34 @@ export default function SelectedThesis({ ThesisId }) {
             thesis.sub === null || "" ? "hidden" : ""
           }`}
         >
-          <div className="d_title">Co-supervisor</div>
+          <div className="d_title">{t("Co-supervisor")}</div>
           <div>{thesis.sub}</div>
         </div>
         <div className="Thesis_Collage">
-          <div className="d_title">Collage</div>
+          <div className="d_title">{t("Collagee")}</div>
           <div>{thesis.collage}</div>
         </div>
         <div className="Thesis_Dept">
-          <div className="d_title">Department</div>
+          <div className="d_title">{t("Departmentt")}</div>
           <div>{thesis.dept}</div>
         </div>
         <div className="Thesis_date">
           <div className="thesis_year">
             <div className="cr">
               <dd className="dd">{thesis.year}</dd>
-              <dt className="dt">Year</dt>
+              <dt className="dt">{t("Year")}</dt>
             </div>
           </div>
           <div className="Academic_year">
             <div className="cr">
               <dd className="dd">2020-2021</dd>
-              <dt className="dt">Academic year</dt>
+              <dt className="dt">{t("Academic year")}</dt>
             </div>
           </div>
           <div className="semester">
             <div className="cr">
               <dd className="dd">First</dd>
-              <dt className="dt">Semester</dt>
+              <dt className="dt">{t("Semester")}</dt>
             </div>
           </div>
         </div>
@@ -60,13 +61,13 @@ export default function SelectedThesis({ ThesisId }) {
           <div className="type">
             <div className="cr">
               <dd className="dd">{thesis.type}</dd>
-              <dt className="dt">Type</dt>
+              <dt className="dt">{t("Type")}</dt>
             </div>
           </div>
           <div className="thesis_lang">
             <div className="cr">
               <dd className="dd">EN</dd>
-              <dt className="dt">Language</dt>
+              <dt className="dt">{t("Language")}</dt>
             </div>
           </div>
         </div>

@@ -1,11 +1,13 @@
 import "./Footer.css"
+import { useTranslation } from "react-i18next";
 export default function Footer() {
+  const [t] = useTranslation();
     return (
       <footer>
         <div className="top">
           <div className="pages"></div>
           <div className="AHU">
-            <h3>Al-Hussein Bin Talal University</h3>
+            <h3>{t("AHU")}</h3>
           </div>
         </div>
         <div className="social" id="contact">

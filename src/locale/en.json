@@ -24,6 +24,10 @@
     "Language": "Language",
     "Home": "Home",
     "About": "About",
-    "Contact": "Contact"
-
+    "Contact": "Contact",
+    "AHU" : "Al-Hussein Bin Talal University",
+    "Researcher" : "Researcher",
+    "Co-supervisor" : "Co-supervisor",
+    "Semester" : "Semester",
+    "Academic year" : "Academic year"
 }

@@ -17,9 +17,16 @@
     "thesis": "الرسائل الجامعية",
     "No thesis found": "لم يتم إيجاداي رسائل جامعية",
     "Collage": "الكلية:",
+    "Collagee": "الكلية",
     "Department": "القسم:",
+    "Departmentt": "القسم",
+    "Supervisorr":"المشرف",
     "Supervisor": "المشرف:",
     "Published": "نشرت",
     "Type": "النوع",
-    "Language": "اللغة"
+    "Language": "اللغة",
+    "AHU":"جامعة الحسين بن طلال",
+    "Researcher" : "الباحث",
+    "Semester": "الفصل",
+    "Academic year": "العام الدراسي"
 }
