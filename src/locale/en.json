@@ -29,5 +29,11 @@
     "Researcher" : "Researcher",
     "Co-supervisor" : "Co-supervisor",
     "Semester" : "Semester",
-    "Academic year" : "Academic year"
+    "Academic year" : "Academic year",
+    "Z-A": "Z-A",
+    "Login" : "Login",
+    "Username" : "Username",
+    "Password" : "Password",
+    "Admin" : "Admin",
+    "error1" : "An error occurred. Please try again later."
 }

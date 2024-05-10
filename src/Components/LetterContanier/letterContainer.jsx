@@ -1,10 +1,11 @@
 import "./letterContainer.css";
 import { useState, useEffect } from "react";
-import data from "../../data.js";
 import ScrollAnimation from "../scrollanimate.jsx";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import Cookies from "js-cookie";
+import { Alert } from "@mui/material";
+
 // Function to remove diacritics from Arabic text
 const removeDiacritics = (text) => {
   if (!text) return "";
@@ -14,79 +15,121 @@ const removeDiacritics = (text) => {
     : text;
 };
 
+export default function LetterContainer({
+  tags,
+  sortTag,
+  collageTag,
+  DepartmentTag,
+}) {
+  const [letters, setLetters] = useState(null);
+  const [loading, setLoading] = useState(true); // State to track loading status
+  const [error, setError] = useState(null); // State to handle errors
 
-export default function LetterContainer({ tags, sortTag , collageTag, DepartmentTag}) {
-  const [letters] = useState(data);
   const lettersPerPage = 27;
   const [currentSection, setCurrentSection] = useState(1);
   const sectionsPerPage = 5;
 
+  async function getThesis() {
+    try {
+      const response = await fetch("http://localhost:13500/thesis");
+      if (!response.ok) {
+        throw new Error("Failed to fetch data");
+      }
+      setError(null);
+      return await response.json();
+      
+    } catch (error) {
+      setError(t("error1"));
+    }
+  }
+  useEffect(() => {
+    async function fetchData() {
+      const thesisData = await getThesis();
+      if (!error) {
+        setLetters(thesisData);
+        setLoading(false); // Set loading to false when data is fetched
+      }
+    }
+    fetchData();
+  }, [error]);
   const [t] = useTranslation();
 
   const lang = Cookies.get("i18next");
   // Function to filter letters based on tags
-const filterLetters = () => {
-  
-  return letters
-    .filter((letter) => {
-      // If tags array is empty, return true for all letters
-      if (tags.length === 0) {
+  const filterLetters = () => {
+    if (!letters) {
+      return [];
+    }
+    return letters
+      .filter((letter) => {
+        // If tags array is empty, return true for all letters
+        if (tags.length === 0) {
+          return true;
+        }
+
+        // Check if all tags are included in the letter properties
+        return tags.every((tag) =>
+          Object.values(letter).some((value) => {
+            // Convert numbers to strings for comparison
+            const stringValue = String(value);
+            // Remove diacritics from both tag and value before comparison
+            const normalizedTag = removeDiacritics(tag);
+            const normalizedValue = removeDiacritics(stringValue);
+
+            return normalizedValue
+              .toLowerCase()
+              .includes(normalizedTag.toLowerCase()); // Changed here
+          })
+        );
+      })
+      .filter((letter) => {
+        // Filter based on collage if collageTags is not empty
+        if (
+          (collageTag.length > 0 || collageTag !== "") &&
+          collageTag !== "empty"
+        ) {
+          const normalizedTag = removeDiacritics(collageTag);
+          const normalizedValue = removeDiacritics(letter.collage);
+          return normalizedValue.toLowerCase() === normalizedTag.toLowerCase(); // Changed here
+        }
         return true;
-      }
-
-      // Check if all tags are included in the letter properties
-      return tags.every((tag) =>
-        Object.values(letter).some((value) => {
-          // Convert numbers to strings for comparison
-          const stringValue = String(value);
-          // Remove diacritics from both tag and value before comparison
-          const normalizedTag = removeDiacritics(tag);
-          const normalizedValue = removeDiacritics(stringValue);
-          
-          return normalizedValue
-            .toLowerCase()
-            .includes(normalizedTag.toLowerCase()); // Changed here
-        })
-      );
-    })
-    .filter((letter) => {
-      // Filter based on collage if collageTags is not empty
-      if (
-        (collageTag.length > 0 || collageTag !== "") &&
-        collageTag !== "empty"
-      ) {
-        const normalizedTag = removeDiacritics(collageTag);
-        const normalizedValue = removeDiacritics(letter.collage);
-        return normalizedValue.toLowerCase() === normalizedTag.toLowerCase(); // Changed here
-      }
-      return true;
-    })
-    .filter((letter) => {
-      // Filter based on department if departmentTags is not empty
-      if (
-        (DepartmentTag.length > 0 || DepartmentTag !== "") &&
-        DepartmentTag !== "empty"
-      ) {
-        const normalizedTag = removeDiacritics(DepartmentTag);
-        const normalizedValue = removeDiacritics(letter.dept);
-        return normalizedValue.toLowerCase() === normalizedTag.toLowerCase(); // Changed here
-      }
-      // If collageTags and departmentTags are empty, return true for all letters
-      return true;
-    });
-    
-};
-
-
+      })
+      .filter((letter) => {
+        // Filter based on department if departmentTags is not empty
+        if (
+          (DepartmentTag.length > 0 || DepartmentTag !== "") &&
+          DepartmentTag !== "empty"
+        ) {
+          const normalizedTag = removeDiacritics(DepartmentTag);
+          const normalizedValue = removeDiacritics(letter.dept);
+          return normalizedValue.toLowerCase() === normalizedTag.toLowerCase(); // Changed here
+        }
+        // If collageTags and departmentTags are empty, return true for all letters
+        return true;
+      });
+  };
 
   // Function to sort letters based on sortTag
   const sortLetters = (lettersToSort) => {
     if (sortTag.includes("year")) {
-      lettersToSort.sort((a, b) => a.year - b.year);
-    } else if (sortTag.includes("alphabet")) {
       lettersToSort.sort((a, b) =>
-        a["letter Topic"].localeCompare(b["letter Topic"])
+        sortTag === "year" ? a.year - b.year : b.year - a.year
       );
+    } else if (sortTag.includes("alphabet")) {
+      if (lang === "ar") {
+        const collator = new Intl.Collator("ar", { sensitivity: "base" });
+        lettersToSort.sort((a, b) =>
+          sortTag === "alphabet"
+            ? collator.compare(a["letter Topic"], b["letter Topic"])
+            : collator.compare(b["letter Topic"], a["letter Topic"])
+        );
+      } else {
+        lettersToSort.sort((a, b) =>
+          sortTag === "alphabet"
+            ? a["letter Topic"].localeCompare(b["letter Topic"])
+            : b["letter Topic"].localeCompare(a["letter Topic"])
+        );
+      }
     }
     return lettersToSort;
   };
@@ -124,7 +167,6 @@ const filterLetters = () => {
     setCurrentSection(1);
   }, [tags, sortTag, collageTag, DepartmentTag]);
 
-
   // Function to generate section buttons for the current group of sections
   const renderSectionButtons = () => {
     const sectionButtons = [];
@@ -152,9 +194,24 @@ const filterLetters = () => {
 
   return (
     <div className="main_contanier">
+      {error ? (
+        <div className="error">
+          <Alert
+            severity="error"
+            onClose={() => {
+              setError(null);
+            }}
+            style={{ backgroundColor: "#10060D", color: "white" }}
+          >
+            {error}
+          </Alert>
+        </div>
+      ) : null}
       <h1 style={{ color: "#e0af14" }}>{t("thesis")}</h1>
       <div className="letter_contanier">
-        {sortedLetters.length === 0 ? (
+        {loading ? ( // Conditionally render loading message
+          <div className="loading-message empty-message">Loading...</div>
+        ) : sortedLetters.length === 0 ? (
           <div className="empty-message">{t("No thesis found")}</div>
         ) : (
           sortedLetters
@@ -168,7 +225,11 @@ const filterLetters = () => {
                   key={index}
                   direction={index % 2 === 0 ? "_right" : null}
                 >
-                  <div className="letter" key={index}>
+                  <Link
+                    to={`/thesis/${letter._id}`}
+                    className="letter"
+                    key={index}
+                  >
                     <div
                       className={`card ${
                         lang === "ar"
@@ -178,12 +239,7 @@ const filterLetters = () => {
                     >
                       <div className="header">
                         <div>
-                          <Link
-                            to={`/thesis/${letter.researcher}`}
-                            className="title"
-                          >
-                            {letter["letter Topic"]}
-                          </Link>
+                          <div className="title">{letter.title}</div>
                           <p className="name">{letter.researcher}</p>
                         </div>
                       </div>
@@ -192,10 +248,10 @@ const filterLetters = () => {
                           {t("Collage")} {letter.collage}
                         </div>
                         <div>
-                          {t("Department")} {letter.dept}
+                          {t("Department")} {letter.department}
                         </div>
                         <div>
-                          {t("Supervisor")} {letter.super}
+                          {t("Supervisor")} {letter.supervisor}
                         </div>
                       </div>
                       <dl className="post-info">
@@ -208,12 +264,12 @@ const filterLetters = () => {
                           <dt className="dt">{t("Type")}</dt>
                         </div>
                         <div className="cr">
-                          <dd className="dd">EN</dd>
+                          <dd className="dd">{letter.language}</dd>
                           <dt className="dt">{t("Language")}</dt>
                         </div>
                       </dl>
                     </div>
-                  </div>
+                  </Link>
                 </ScrollAnimation>
               );
             })

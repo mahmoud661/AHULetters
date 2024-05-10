@@ -5,7 +5,7 @@ import Navbar from "../Components/NavBar/NavBar.jsx";
 import SearchBar from "../Components/Search/SearchBar.jsx";
 import Footer from "../Components/Footer/Footer.jsx";
 
-function Home() {
+function Home(props) {
   const [tags, setTags] = useState([]);
   const [sortTags, setSorttags] = useState([]);
   const [collageTags, setCollageTags] = useState("");
@@ -25,7 +25,7 @@ function Home() {
 
   return (
     <div className="page">
-      <Navbar />
+      <Navbar updateAdmin={props.updateAdmin}/>
       <SearchBar
         onTagsChange={handleTagsChange}
         onSortTagChange={handleSortTagsChange}

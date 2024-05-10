@@ -4,7 +4,9 @@ import { useTranslation } from "react-i18next";
 import "./SearchBar.css";
 
 export default function SearchBar(props) {
-  const [t,i18n] = useTranslation();
+  const [yearSortDirection, setYearSortDirection] = useState("down");
+
+  const [t, i18n] = useTranslation();
   const [input, setInput] = useState("");
   const [tags, setTags] = useState([]);
   const [selectedFilters, setSelectedFilters] = useState("");
@@ -61,7 +63,6 @@ export default function SearchBar(props) {
     props.onTagsChange([]);
   };
   const handleClearfilter = () => {
-   
     setCollegeTag("");
     setDepartmentTag("");
     // You can also reset the select elements to their first options
@@ -74,15 +75,36 @@ export default function SearchBar(props) {
       collegeSelect.value = "empty";
     }
   };
+
   const handleClearSort = () => {
     setSelectedFilters("");
-   
   };
 
   const handleFilterChange = (filterName) => {
     // Toggle the filter on/off
-    setSelectedFilters(filterName);
+    if (selectedFilters === filterName) {
+      if (filterName === "year") {
+        setSelectedFilters("yearDesc");
+        
+      } else if (filterName === "yearDesc") {
+        setSelectedFilters("year");
+       
+      } else if (filterName === "alphabet") {
+        setSelectedFilters("alphabetDesc");
+      } else if (filterName === "alphabetDesc") {
+        setSelectedFilters("alphabet");
+      } else {
+        setSelectedFilters("");
+      }
+    } else {
+      setSelectedFilters(filterName);
+      if (filterName === "year") {
+        setYearSortDirection("up");
+      }
+    }
   };
+
+
 
   useEffect(() => {
     props.onSortTagChange(selectedFilters);
@@ -94,28 +116,31 @@ export default function SearchBar(props) {
     <div className={"searchDiv " + (searchVisible ? "btnIn" : "btnOut")}>
       <div className={"Search_Bar " + (searchVisible ? "visible" : "hidden")}>
         <div className="Search_tag">
-          <div className="input-wrapper">
-            <button className="icon" onClick={handleSearch}>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="16"
-                height="16"
-                fill="currentColor"
-                className="bi bi-search"
-                viewBox="0 0 16 16"
-              >
-                <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0" />
-              </svg>
-            </button>
+          <div className="group">
             <input
-              type="text"
-              name="text"
-              className="input_search"
-              placeholder={`${t("search")}..`}
+              placeholder={t("Search")}
+              className="input"
               value={input}
               onChange={handleInputChange}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  handleSearch();
+                }
+              }}
+              
             />
+            <svg
+              className="iconn"
+              aria-hidden="true"
+              viewBox="0 0 24 24"
+              onClick={handleSearch}
+            >
+              <g>
+                <path d="M21.53 20.47l-3.66-3.66C19.195 15.24 20 13.214 20 11c0-4.97-4.03-9-9-9s-9 4.03-9 9 4.03 9 9 9c2.215 0 4.24-.804 5.808-2.13l3.66 3.66c.147.146.34.22.53.22s.385-.073.53-.22c.295-.293.295-.767.002-1.06zM3.5 11c0-4.135 3.365-7.5 7.5-7.5s7.5 3.365 7.5 7.5-3.365 7.5-7.5 7.5-7.5-3.365-7.5-7.5z"></path>
+              </g>
+            </svg>
           </div>
+
           <div className="tags">
             {tags.map((tag, index) => (
               <div key={index} className="tag">
@@ -201,17 +226,24 @@ export default function SearchBar(props) {
           <span>{t("Sort by")}:</span>
           <button
             className={`filter_btn ${
-              selectedFilters.includes("alphabet") ? "selected" : ""
+              selectedFilters === "alphabet" ||
+              selectedFilters === "alphabetDesc"
+                ? "selected"
+                : ""
             }`}
             onClick={() => handleFilterChange("alphabet")}
           >
-            {t("A-Z")}
+            {selectedFilters === "alphabet" ? t("A-Z") : t("Z-A")}
           </button>
           <button
-            className={`filter_btn ${
+            className={`filter_btn ${selectedFilters === "year" ? "down" : "up"} ${
               selectedFilters.includes("year") ? "selected" : ""
             }`}
-            onClick={() => handleFilterChange("year")}
+            onClick={() =>
+              handleFilterChange(
+                selectedFilters === "year" ? "year" : "yearDesc"
+              )
+            }
           >
             {t("Year")}
           </button>

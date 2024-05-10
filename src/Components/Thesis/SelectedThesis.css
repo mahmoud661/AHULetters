@@ -3,7 +3,7 @@
     justify-content: center;
     margin: 20px;
     align-self: center;
-
+    min-height: 50vh;
 }
 .Thesis1{
    display: flex;
@@ -125,4 +125,51 @@
     transform: translateY(0px);
     opacity: 1;
   }
+}
+.edit-controls-main{
+   display: flex;
+flex-direction: column;
+   gap: 20px;
+  justify-content: center;
+  align-items: center;
+}
+.edit-controls{
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+  align-items: center;
+}
+
+.files-uploader{
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center ;
+}
+.input {
+  max-width: 190px;
+  display: none;
+}
+
+.labelFile {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 250px;
+  height: 190px;
+  border: 2px dashed #ccc;
+  align-items: center;
+  text-align: center;
+  padding: 5px;
+  color: #404040;
+  cursor: pointer;
+}
+.custum-file-upload-container{
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  justify-content: center;
+  align-items: center;
 }

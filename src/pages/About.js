@@ -5,13 +5,13 @@ import Navbar from "../Components/NavBar/NavBar.jsx";
 import Footer from "../Components/Footer/Footer.jsx";
 import AboutCo from "../Components/About/About_Co.jsx";
 
-function About() {
+function About(props) {
 
 
   return (
     <div>
-      <Navbar />
-      <AboutCo/>
+      <Navbar updateAdmin={props.updateAdmin} />
+      <AboutCo />
       <Footer />
     </div>
   );

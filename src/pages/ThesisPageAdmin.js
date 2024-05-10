@@ -3,19 +3,19 @@ import React from "react";
 import "../App.css"
 import Navbar from "../Components/NavBar/NavBar.jsx";
 import Footer from "../Components/Footer/Footer.jsx";
-import SelectedThesis from "../Components/Thesis/SelectedThesis.jsx";
+import SelectedThesisAdmin from "../Components/Thesis/SelectedThesisadmin.jsx";
 import { useParams } from "react-router-dom";
 
-function Thesis(props) {
+function ThesisAdmin(props) {
     const { ThesisId } = useParams();  
 
   return (
     <div>
       <Navbar updateAdmin={props.updateAdmin} />
-      <SelectedThesis ThesisId={ThesisId} />
+      <SelectedThesisAdmin ThesisId={ThesisId} />
       <Footer />
     </div>
   );
 }
 
-export default Thesis;
+export default ThesisAdmin;

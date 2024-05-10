@@ -1,15 +1,22 @@
-import { useState ,useEffect} from "react";
+import { useState, useEffect } from "react";
 import "./NavBar.css";
 import LogoE from "../../Images/Logo.png";
 import Burger from "./burgermenu";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import Cookies from "js-cookie";
+import { Navigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import AlertDialogSlide from "../Dialog";
 
-function Navbar() {
+function Navbar(props) {
+   const navigate = useNavigate();
   // adding the states
   const [isActive, setIsActive] = useState(false);
   const [t, i18n] = useTranslation();
+  const [admin, setAdmin] = useState(null);
+  const [open, setOpen] = useState(false);
+
 
   //clean up function to remove the active className
   const removeActive = () => {
@@ -21,11 +28,46 @@ function Navbar() {
     i18n.changeLanguage(lng);
   };
 
-  const lang = Cookies.get("i18next") || "EN"
-  useEffect(()=>{
+  const lang = Cookies.get("i18next") || "EN";
+  useEffect(() => {
+    window.document.dir = i18n.dir();
+  }, [lang, i18n]);
 
-window.document.dir = i18n.dir();
-  },[lang,i18n])
+ useEffect(() => {
+   const storedAdmin = JSON.parse(localStorage.getItem("AHUThesisAdmin13500"));
+   setAdmin(storedAdmin);
+ }, []);
+
+
+ const HandleLogout = () => {
+   //Perform any logout logic, such as clearing local storage
+   localStorage.setItem("AHUThesisAdmin13500", null);
+   // Update the admin state to null
+   setAdmin(null);
+   // Use useHistory hook to get the history object
+    props.updateAdmin(null);
+   // Navigate to the desired route
+   navigate("/");
+ };
+
+ const renderAdmin = () => {
+  if (admin && admin !== null) {
+     return (
+       <div className="adminbtn" onClick={() => setOpen(true)}>
+         {t("Logout")}
+       </div>
+     );
+  } else {
+   return (
+     <Link className="admin-link" to={"/login"}>
+      
+       {t("Admin")}
+     </Link>
+   );
+  }
+ }
+
+ 
 
   return (
     <div className="App">
@@ -50,7 +92,7 @@ window.document.dir = i18n.dir();
               <strong>{t("title")}</strong>
             </Link>
           </div>
-          <ul className={`navMenu ${isActive ? "active" : ""}`}>
+          <div className={`navMenu ${isActive ? "active" : ""}`}>
             <li onClick={removeActive}>
               <Link to={"/"} href="#home" className={"navLink nav_btn"}>
                 {t("navbar1")}
@@ -66,8 +108,8 @@ window.document.dir = i18n.dir();
                 {t("navbar3")}
               </a>
             </li>
-          </ul>
-          <div className="language-selector">
+          </div>
+          <div className=" language-selector">
             {i18n.language === "en" ? (
               <>
                 <span onClick={() => changeLanguage("ar")}>عربي</span>
@@ -78,11 +120,13 @@ window.document.dir = i18n.dir();
               </>
             )}
           </div>
+          <div className="adminbtn">{renderAdmin()}</div>
           <div className={`hamburger `}>
             <Burger />
           </div>
         </nav>
       </header>
+      <AlertDialogSlide openAlert={open} logout={HandleLogout} />
     </div>
   );
 }
