@@ -5,7 +5,6 @@ import Burger from "./burgermenu";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import Cookies from "js-cookie";
-import { Navigate } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import AlertDialogSlide from "../Dialog";
 
@@ -49,7 +48,10 @@ function Navbar(props) {
    // Navigate to the desired route
    navigate("/");
  };
+const handelCancelLogout = () => {
+  setOpen(false);
 
+}
  const renderAdmin = () => {
   if (admin && admin !== null) {
      return (
@@ -126,7 +128,13 @@ function Navbar(props) {
           </div>
         </nav>
       </header>
-      <AlertDialogSlide openAlert={open} logout={HandleLogout} />
+      <AlertDialogSlide
+        openAlert={open}
+        cancelAction={handelCancelLogout}
+        Action={HandleLogout}
+        title={t("Logout")}
+        message={t("Are you sure you want to logout?")}
+      />
     </div>
   );
 }

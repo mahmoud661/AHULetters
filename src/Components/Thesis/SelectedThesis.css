@@ -103,7 +103,9 @@
   background-color: #e0af14;
   transition-duration: .3s;
 }
-
+.hidden{
+  display: none;
+}
 .D_Btn:hover .icon2 {
   border-bottom: 2px solid rgb(235, 235, 235);
   border-left: 2px solid rgb(235, 235, 235);
@@ -148,9 +150,10 @@ flex-direction: column;
   justify-content: center;
   align-items: center ;
 }
-.input {
-  max-width: 190px;
-  display: none;
+.input_file {
+  position: absolute;
+  top: -9999px;
+  left: -9999px;
 }
 
 .labelFile {
@@ -173,3 +176,4 @@ flex-direction: column;
   justify-content: center;
   align-items: center;
 }
+

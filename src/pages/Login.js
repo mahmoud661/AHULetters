@@ -78,6 +78,11 @@ export default function Login({ updateAdmin }) {
             type="text"
             value={userName}
             onChange={(e) => setUserName(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                handleSubmit(e); // Pass the event object to handleSubmit
+              }
+            }}
           />
           <input
             placeholder={t("Password")}
@@ -85,6 +90,11 @@ export default function Login({ updateAdmin }) {
             type={showPassword ? "text" : "password"}
             value={password}
             onChange={(e) => setPassword(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                handleSubmit(e); // Pass the event object to handleSubmit
+              }
+            }}
           />
           <button className="login_btn" type="submit" onClick={handleSubmit}>
             {loading ? <CircularProgress size={24} /> : t("Login")}

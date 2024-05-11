@@ -10,6 +10,8 @@ export default function SearchBar(props) {
   const [input, setInput] = useState("");
   const [tags, setTags] = useState([]);
   const [selectedFilters, setSelectedFilters] = useState("");
+    const [departments, setDepartments] = useState([]);
+
 
   const [collegeTag, setCollegeTag] = useState("");
   const [departmentTag, setDepartmentTag] = useState("");
@@ -20,23 +22,36 @@ export default function SearchBar(props) {
   };
   const [searchVisible, setSearchVisible] = useState(false);
 
-  const handleSelectChange = (e, selectType) => {
-    const selectedOption = e.target.value;
-    if (selectedOption !== "") {
-      // Add the selected option to the corresponding filter tags
-      switch (selectType) {
-        case "college":
-          setCollegeTag(selectedOption);
-          break;
-        case "department":
-          setDepartmentTag(selectedOption);
-          break;
-        // Add more cases for other filter options as needed
-        default:
-          break;
-      }
-    }
-  };
+ const handleSelectChange = (e, selectType) => {
+   const selectedOption = e.target.value;
+   if (selectedOption !== "") {
+     switch (selectType) {
+       case "college":
+         setCollegeTag(selectedOption);
+         if (selectedOption === "empty") {
+           setDepartments(["Department A", "Department B", "Department C"]);
+         } else {
+           switch (selectedOption) {
+             case "العلوم":
+               setDepartments(["الفيزياء", "الكيمياء", "البيولوجيا"]);
+               break;
+             case "العلوم التربوية":
+               setDepartments(["التربية الأساسية", "التربية الخاصة"]);
+               break;
+             // Add cases for other colleges as needed
+             default:
+               break;
+           }
+         }
+         break;
+       case "department":
+         setDepartmentTag(selectedOption);
+         break;
+       default:
+         break;
+     }
+   }
+ };
 
   const toggleSearchVisibility = () => {
     setSearchVisible(!searchVisible);
@@ -65,6 +80,7 @@ export default function SearchBar(props) {
   const handleClearfilter = () => {
     setCollegeTag("");
     setDepartmentTag("");
+     setDepartments(["Department A", "Department B", "Department C"]);
     // You can also reset the select elements to their first options
     const departmentSelect = document.getElementById("departmentSelect");
     if (departmentSelect) {
@@ -127,7 +143,6 @@ export default function SearchBar(props) {
                   handleSearch();
                 }
               }}
-              
             />
             <svg
               className="iconn"
@@ -180,13 +195,15 @@ export default function SearchBar(props) {
             onChange={(e) => handleSelectChange(e, "department")}
           >
             <option value="empty">{t("Select department...")}</option>
-            <option value="Department A">Department A</option>
-            <option value="الرياضيات">الرياضيات</option>
-            {/* Add more options as needed */}
+            {departments.map((department, index) => (
+              <option key={index} value={department}>
+                {department}
+              </option>
+            ))}
           </select>
           <select
             id="collegeSelect"
-            className={`filter_btn ${
+            className={`filter_btn filter_select ${
               selectedFilters.includes("college") ? "selected" : ""
             }`}
             onChange={(e) => handleSelectChange(e, "college")}
@@ -236,9 +253,9 @@ export default function SearchBar(props) {
             {selectedFilters === "alphabet" ? t("A-Z") : t("Z-A")}
           </button>
           <button
-            className={`filter_btn ${selectedFilters === "year" ? "down" : "up"} ${
-              selectedFilters.includes("year") ? "selected" : ""
-            }`}
+            className={`filter_btn ${
+              selectedFilters === "year" ? "down" : "up"
+            } ${selectedFilters.includes("year") ? "selected" : ""}`}
             onClick={() =>
               handleFilterChange(
                 selectedFilters === "year" ? "year" : "yearDesc"

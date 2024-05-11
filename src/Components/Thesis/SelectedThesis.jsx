@@ -2,11 +2,13 @@ import "./SelectedThesis.css";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Alert } from "@mui/material";
+import { Navigate } from "react-router-dom";
 
 export default function SelectedThesis({ ThesisId }) {
   const [thesis, setThesis] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [redirectHome, setRedirectHome] = useState(false); // State for redirection
 
   useEffect(() => {
     const fetchThesis = async () => {
@@ -26,26 +28,68 @@ export default function SelectedThesis({ ThesisId }) {
         }
 
         const data = await response.json();
+
+        // Convert array to Uint8Array
+        if (data.thesisPdf && data.thesisPdf.data) {
+          try {
+            const uint8Array = new Uint8Array(data.thesisPdf.data.data);
+
+            // Create Blob from Uint8Array
+            const blob = new Blob([uint8Array], { type: "application/pdf" });
+
+            // Create File object from Blob
+            const file = new File([blob], data.researcher + " thesis.pdf", {
+              type: "application/pdf",
+            });
+
+            // Replace buffer data with file object
+            data.thesisPdf.data = file;
+          } catch (error) {
+            console.error("Error fetching thesis:", error);
+          }
+        }
+        // Convert array to Uint8Array
+        if (data.shortThesisPdf && data.shortThesisPdf.data) {
+          const uint8Array = new Uint8Array(data.shortThesisPdf.data.data);
+
+          // Create Blob from Uint8Array
+          const blob = new Blob([uint8Array], { type: "application/pdf" });
+
+          // Create File object from Blob
+          const file = new File(
+            [blob],
+            data.researcher + " Thesis Abstract.pdf",
+            {
+              type: "application/pdf",
+            }
+          );
+
+          // Replace buffer data with file object
+          data.shortThesisPdf.data = file;
+        }
+
         setThesis(data);
+
         setLoading(false);
       } catch (error) {
         console.error("Error fetching thesis:", error);
         setError("Error fetching thesis. Please try again later.");
+        setRedirectHome(true); // Set redirect state to true if error occurs
+
         setLoading(false);
       }
     };
 
     fetchThesis();
 
-    // Clean up function
     return () => {
-      // Any cleanup code here, if needed
+      // Clean up function if needed
     };
   }, [ThesisId]);
-
   const [t] = useTranslation();
-
-  
+  if (redirectHome) {
+    return <Navigate to="/" />; // Redirect to home page if redirect state is true
+  }
 
   return (
     <div className="Thesis1_main">
@@ -66,7 +110,36 @@ export default function SelectedThesis({ ThesisId }) {
         <div>{t("Loading")}...</div>
       ) : (
         <div className="Thesis1">
-          <div className="Thesis_title title">{thesis.title}</div>
+          <div
+            className="Thesis_title title"
+            onClick={() => {
+              if (!thesis.shortThesisPdf || !thesis.shortThesisPdf.data) {
+                return;
+              }
+              const pdfData = thesis.shortThesisPdf.data;
+
+              if (pdfData instanceof Blob) {
+                const pdfUrl = URL.createObjectURL(pdfData);
+                window.open(pdfUrl, "_blank");
+              } else if (typeof pdfData === "string") {
+                window.open(pdfData, "_blank");
+              } else if (
+                pdfData instanceof ArrayBuffer ||
+                pdfData instanceof Uint8Array
+              ) {
+                // Convert ArrayBuffer or Uint8Array to Blob
+                const blob = new Blob([pdfData], {
+                  type: "application/pdf",
+                });
+                const pdfUrl = URL.createObjectURL(blob);
+                window.open(pdfUrl, "_blank");
+              } else {
+                console.error("Invalid PDF data format");
+              }
+            }}
+          >
+            {thesis.title}
+          </div>
           <div className="Thesis_researcher column_align">
             <div className="d_title">{t("Researcher")}</div>
             <div>{thesis.researcher}</div>
@@ -76,13 +149,12 @@ export default function SelectedThesis({ ThesisId }) {
             <div>{thesis.supervisor}</div>
           </div>
           <div
-            className={`Thesis_CoSup ${
-              thesis.co_supervisor === null || "" ? "hidden" : ""
-            }`}
+            className={`Thesis_CoSup ${!thesis.co_supervisor ? "hidden" : ""}`}
           >
             <div className="d_title">{t("Co-supervisor")}</div>
             <div>{thesis.co_supervisor}</div>
           </div>
+
           <div className="Thesis_Collage">
             <div className="d_title">{t("Collagee")}</div>
             <div>{thesis.collage}</div>
@@ -126,7 +198,34 @@ export default function SelectedThesis({ ThesisId }) {
             </div>
           </div>
           <div className="Thesis_pdf">
-            <button className="D_Btn">
+            <button
+              className="D_Btn"
+              onClick={() => {
+                if (!thesis.thesisPdf || !thesis.thesisPdf.data) {
+                  return;
+                }
+                const pdfData = thesis.thesisPdf.data;
+
+                if (pdfData instanceof Blob) {
+                  const pdfUrl = URL.createObjectURL(pdfData);
+                  window.open(pdfUrl, "_blank");
+                } else if (typeof pdfData === "string") {
+                  window.open(pdfData, "_blank");
+                } else if (
+                  pdfData instanceof ArrayBuffer ||
+                  pdfData instanceof Uint8Array
+                ) {
+                  // Convert ArrayBuffer or Uint8Array to Blob
+                  const blob = new Blob([pdfData], {
+                    type: "application/pdf",
+                  });
+                  const pdfUrl = URL.createObjectURL(blob);
+                  window.open(pdfUrl, "_blank");
+                } else {
+                  console.error("Invalid PDF data format");
+                }
+              }}
+            >
               <svg
                 className="svgIcon"
                 viewBox="0 0 384 512"

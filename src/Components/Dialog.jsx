@@ -32,22 +32,28 @@ React.useEffect(() => {
         open={open}
         TransitionComponent={Transition}
         keepMounted
-        onClose={handleClose}
+        onClose={props.cancelAction}
         aria-describedby="alert-dialog-slide-description"
       >
-        <DialogTitle>{"Use Google's location service?"}</DialogTitle>
+        <DialogTitle>{props.title}</DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-slide-description">
-            Let Google help apps determine location. This means sending
-            anonymous location data to Google, even when no apps are running.
+            {props.message}
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose}>Cancel</Button>
-          <Button onClick={()=>{
-            handleClose();
-            props.logout();
-          }}>Ok</Button>
+          <Button style={{ color: "#e0af14" }} onClick={props.cancelAction}>
+            Cancel
+          </Button>
+          <Button
+            style={{ color: "red" }}
+            onClick={() => {
+              handleClose();
+              props.Action();
+            }}
+          >
+            Ok
+          </Button>
         </DialogActions>
       </Dialog>
     </React.Fragment>

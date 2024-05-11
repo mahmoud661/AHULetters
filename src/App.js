@@ -6,8 +6,8 @@ import {Route, Routes} from "react-router-dom";
 import About from "./pages/About";
 import Login from "./pages/Login";
 import ThesisAdmin from "./pages/ThesisPageAdmin";
-
-
+import AddThesisPage from "./pages/AddThesis";
+import HomeAdmin from "./pages/HomeAdmin";
 function App() {
 
 
@@ -47,7 +47,16 @@ const updateAdmin = (admin) => {
 
   return (
     <Routes>
-      <Route path="/" element={<Home updateAdmin={updateAdmin} />} />
+      <Route
+        path="/"
+        element={
+          admin !== null ? (
+            <HomeAdmin updateAdmin={updateAdmin} />
+          ) : (
+            <Home updateAdmin={updateAdmin} />
+          )
+        }
+      />
       <Route
         path="/thesis/:ThesisId"
         element={
@@ -60,6 +69,16 @@ const updateAdmin = (admin) => {
       />
       <Route path="/About" element={<About updateAdmin={updateAdmin} />} />
       <Route path="/Login" element={<Login updateAdmin={updateAdmin} />} />
+      <Route
+        path="/AddThesis"
+        element={
+          admin !== null ? (
+            <AddThesisPage updateAdmin={updateAdmin}  />
+          ) : (
+            <Home updateAdmin={updateAdmin} />
+          )
+        }
+      />
     </Routes>
   );
 }

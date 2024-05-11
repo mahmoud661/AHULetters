@@ -16,7 +16,7 @@ const removeDiacritics = (text) => {
     : text;
 };
 
-export default function LetterContainer({
+export default function LetterContainerAdmin({
   tags,
   sortTag,
   collageTag,
@@ -102,7 +102,7 @@ export default function LetterContainer({
           DepartmentTag !== "empty"
         ) {
           const normalizedTag = removeDiacritics(DepartmentTag);
-          const normalizedValue = removeDiacritics(letter.dept);
+          const normalizedValue = removeDiacritics(letter.department);
           return normalizedValue.toLowerCase() === normalizedTag.toLowerCase(); // Changed here
         }
         // If collageTags and departmentTags are empty, return true for all letters
@@ -209,6 +209,12 @@ export default function LetterContainer({
         </div>
       ) : null}
       <h1 style={{ color: "#e0af14" }}>{t("thesis")}</h1>
+      <Link to={"/AddThesis"}><Button
+        variant="contained"
+        style={{ backgroundColor: "#e0af14", color: "#ffffff" }}
+      >
+        Add
+      </Button></Link>
       <div className="letter_contanier">
         {loading ? ( // Conditionally render loading message
           <div className="loading-message empty-message">Loading...</div>
