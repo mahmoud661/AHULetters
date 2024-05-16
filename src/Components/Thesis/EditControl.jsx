@@ -2,7 +2,7 @@ import { TextField, Button } from "@mui/material";
 import "./SelectedThesis.css";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import AlertDialogSlide from "../Dialog";
+import AlertDialogSlide from "../MUI/Dialog";
 
 export default function EditControl(props) {
     const { t } = useTranslation();
@@ -11,60 +11,58 @@ export default function EditControl(props) {
     <div className="edit-controls-main">
       <div className="edit-controls">
         <TextField
-          label="Title"
+          label={t("Title")}
           value={props.editedThesis?.title || ""}
           onChange={(e) => props.handleInputChange(e, "title")}
         />
         <TextField
-          label="Researcher"
+          label={t("Researcher")}
           value={props.editedThesis?.researcher}
           onChange={(e) => props.handleInputChange(e, "researcher")}
         />
         <TextField
-          label="Type"
+          label={t("Type")}
           value={props.editedThesis?.type}
           onChange={(e) => props.handleInputChange(e, "type")}
         />
 
         <TextField
-          type="number"
-          label="Year"
+          label={t("Year")}
           value={props.editedThesis?.year}
           onChange={(e) => props.handleInputChange(e, "year")}
         />
         <TextField
-          label="Collage"
+          label={t("Collagee")}
           value={props.editedThesis?.collage}
           onChange={(e) => props.handleInputChange(e, "collage")}
         />
         <TextField
-          label="Department"
+          label={t("Departmentt")}
           value={props.editedThesis?.department}
           onChange={(e) => props.handleInputChange(e, "department")}
         />
         <TextField
-          label="Supervisor"
+          label={t("Supervisorr")}
           value={props.editedThesis?.supervisor}
           onChange={(e) => props.handleInputChange(e, "supervisor")}
         />
         <TextField
-          label="Co-supervisor"
+          label={t("Co-supervisor")}
           value={props.editedThesis?.co_supervisor}
           onChange={(e) => props.handleInputChange(e, "co_supervisor")}
         />
         <TextField
-          label="Semester"
+          label={t("Semester")}
           value={props.editedThesis?.semester}
           onChange={(e) => props.handleInputChange(e, "semester")}
         />
         <TextField
-          type="number"
-          label="Academic Year"
+          label={t("Academic year")}
           value={props.editedThesis?.academicYear}
           onChange={(e) => props.handleInputChange(e, "academicYear")}
         />
         <TextField
-          label="Language"
+          label={t("Language")}
           value={props.editedThesis?.language}
           onChange={(e) => props.handleInputChange(e, "language")}
         />
@@ -116,7 +114,9 @@ export default function EditControl(props) {
               props.editedThesis.shortThesisPdf.data !== null &&
               typeof props.editedThesis.shortThesisPdf !== typeof "string"
                 ? props.editedThesis?.shortThesisPdf.data.name
-                : "drag and drop your file here or click to select a thesis abstract!"}
+                : t(
+                    "drag and drop your file here or click to select a thesis!"
+                  )}
             </p>
             <input
               className="input_file"
@@ -126,7 +126,7 @@ export default function EditControl(props) {
               onChange={(e) => props.handleFileInputChange(e, "shortThesisPdf")}
             />
           </label>
-          <div className="dd">Thesis abstract</div>
+          <div className="dd">{t("Thesis abstract")}</div>
         </div>
         <div className="custum-file-upload-container">
           <label for="file2" className="labelFile">
@@ -174,7 +174,9 @@ export default function EditControl(props) {
               props.editedThesis.thesisPdf.data &&
               typeof props.editedThesis.thesisPdf !== typeof "string"
                 ? props.editedThesis?.thesisPdf.data.name
-                : "drag and drop your file here or click to select a thesis!"}
+                : t(
+                    "drag and drop your file here or click to select a thesis!"
+                  )}
             </p>
           </label>
           <input
@@ -184,7 +186,7 @@ export default function EditControl(props) {
             id="file2"
             onChange={(e) => props.handleFileInputChange(e, "thesisPdf")}
           />
-          <div className="dd">Thesis</div>
+          <div className="dd">{t("thesis1")}</div>
         </div>
       </div>
       <Button
@@ -192,7 +194,7 @@ export default function EditControl(props) {
         variant="contained"
         style={{ backgroundColor: "#e0af14", color: "#ffffff" }}
       >
-        Confirm
+        {t("Confirm")}
       </Button>
       <Button
         onClick={() => {
@@ -201,7 +203,7 @@ export default function EditControl(props) {
         variant="contained"
         style={{ backgroundColor: "#920101", color: "#ffffff" }}
       >
-        Cancel
+        {t("Cancel")}
       </Button>
 
       <AlertDialogSlide

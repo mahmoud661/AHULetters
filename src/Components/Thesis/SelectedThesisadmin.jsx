@@ -3,9 +3,11 @@ import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Alert, Button } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import AlertDialogSlide from "../Dialog";
+import AlertDialogSlide from "../MUI/Dialog";
 import EditControl from "./EditControl";
 import { Navigate } from "react-router-dom";
+import PDfView from "./pdfView";
+import { set } from "mongoose";
 
 export default function SelectedThesis({ ThesisId }) {
   const navigate = useNavigate();
@@ -16,6 +18,8 @@ export default function SelectedThesis({ ThesisId }) {
   const [isEditing, setIsEditing] = useState(false);
   const [editedThesis, setEditedThesis] = useState(null);
   const [redirectHome, setRedirectHome] = useState(false); // State for redirection
+  const [viewPDF, setViewPDF] = useState(false);
+  const [pdffile, setPdfFile] = useState(null);
 
   useEffect(() => {
     const fetchThesis = async () => {
@@ -36,7 +40,7 @@ export default function SelectedThesis({ ThesisId }) {
 
         const data = await response.json();
 
-        if (data.thesisPdf && data.thesisPdf.data  ) {
+        if (data.thesisPdf && data.thesisPdf.data) {
           const uint8Array = new Uint8Array(data.thesisPdf.data.data);
 
           // Create Blob from Uint8Array
@@ -49,6 +53,7 @@ export default function SelectedThesis({ ThesisId }) {
 
           // Replace buffer data with file object
           data.thesisPdf.data = file;
+          setPdfFile(file);
         }
         // Convert array to Uint8Array
         if (data.shortThesisPdf && data.shortThesisPdf.data) {
@@ -197,6 +202,17 @@ export default function SelectedThesis({ ThesisId }) {
       ) : null}
       {loading || error ? (
         <div>{t("Loading")}...</div>
+      ) : viewPDF ? (
+        <div className="Thesis1">
+          <Button style={{ backgroundColor: "#e01d0f" }} variant="contained" onClick={()=>{
+            setViewPDF(false);
+          }}>
+        
+            {"<"} Go back
+          </Button>
+
+          <PDfView file={pdffile} />
+        </div>
       ) : (
         <div className="Thesis1">
           {isEditing ? (
@@ -249,7 +265,10 @@ export default function SelectedThesis({ ThesisId }) {
               </div>
               <div
                 className={`Thesis_CoSup ${
-                  thesis.co_supervisor === null || "" ? "hidden" : ""
+                  thesis.co_supervisor === null ||
+                  typeof thesis.co_supervisor === "undefined"
+                    ? "hidden"
+                    : ""
                 }`}
               >
                 <div className="d_title">{t("Co-supervisor")}</div>
@@ -304,38 +323,11 @@ export default function SelectedThesis({ ThesisId }) {
                     if (!thesis.thesisPdf || !thesis.thesisPdf.data) {
                       return;
                     }
-                    const pdfData = thesis.thesisPdf.data;
 
-                    if (pdfData instanceof Blob) {
-                      const pdfUrl = URL.createObjectURL(pdfData);
-                      window.open(pdfUrl, "_blank");
-                    } else if (typeof pdfData === "string") {
-                      window.open(pdfData, "_blank");
-                    } else if (
-                      pdfData instanceof ArrayBuffer ||
-                      pdfData instanceof Uint8Array
-                    ) {
-                      // Convert ArrayBuffer or Uint8Array to Blob
-                      const blob = new Blob([pdfData], {
-                        type: "application/pdf",
-                      });
-                      const pdfUrl = URL.createObjectURL(blob);
-                      window.open(pdfUrl, "_blank");
-                    } else {
-                      console.error("Invalid PDF data format");
-                    }
+                    setViewPDF(true);
                   }}
                 >
-                  <svg
-                    className="svgIcon"
-                    viewBox="0 0 384 512"
-                    height="1em"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path d="M169.4 470.6c12.5 12.5 32.8 12.5 45.3 0l160-160c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L224 370.8 224 64c0-17.7-14.3-32-32-32s-32 14.3-32 32l0 306.7L54.6 265.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l160 160z"></path>
-                  </svg>
-                  <span className="icon2"></span>
-                  <span className="tooltip_D">Download</span>
+                  <div style={{ color: "#fff" }}>view</div>
                 </button>
               </div>
               <Button
@@ -343,7 +335,7 @@ export default function SelectedThesis({ ThesisId }) {
                 variant="contained"
                 style={{ backgroundColor: "#e0af14", color: "#ffffff" }}
               >
-                Edit
+                {t("Edit")}
               </Button>
               <Button
                 onClick={() => {
@@ -352,7 +344,7 @@ export default function SelectedThesis({ ThesisId }) {
                 variant="contained"
                 style={{ backgroundColor: "#920101", color: "#ffffff" }}
               >
-                Delete
+                {t("Delete")}
               </Button>
             </>
           )}

@@ -103,14 +103,14 @@
  
 }
 .card_image_back_right{
-   background-image: url('../../Images/Logo2.png');
-background-position: calc(100% + 110px) calc(100% + 100px);
-   background-size: 300px; /* Adjust the size as needed */
+  background-image: url('../../Images/ThesisIcon.png');
+   background-position:  calc(100% + 1px) calc(100% + 1px);
+   background-size: 100px; /* Adjust the size as needed */
 }
 .card_image_back_left{
-  background-image: url('../../Images/Logo2.png');
-background-position: calc(100% - 110px) calc(100% + 100px);
-   background-size: 300px; /* Adjust the size as needed */
+  background-image: url('../../Images/ThesisIcon.png');
+background-position: calc(0% - 1px) calc(100% + 1px);
+   background-size: 100px; /* Adjust the size as needed */
 }
 .card:hover {
   transform: scale(1.05);

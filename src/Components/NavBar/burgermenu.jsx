@@ -2,10 +2,15 @@ import React, { useState, useEffect } from "react";
 import "./burger.css";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import AlertDialogSlide from "../MUI/Dialog";
+import { useNavigate } from "react-router-dom";
 
-export default function Burger() {
+
+export default function Burger(props) {
   const [isChecked, setChecked] = useState(false);
   const [t, i18n] = useTranslation();
+ 
+
 
   useEffect(() => {
     const handleScroll = () => {
@@ -27,6 +32,21 @@ export default function Burger() {
   const handleLinkClick = () => {
     // Set the checkbox state to unchecked when a link is clicked
     setChecked(false);
+  };
+  const renderAdmin = () => {
+    if (props.admin && props.admin !== null) {
+      return (
+        <div  onClick={() => props.setOpen(true)}>
+          {t("Logout")}
+        </div>
+      );
+    } else {
+      return (
+        <Link className="admin-link" to={"/login"}>
+          {t("Admin")}
+        </Link>
+      );
+    }
   };
   const changeLanguage = (lng) => {
     i18n.changeLanguage(lng);
@@ -70,7 +90,10 @@ export default function Burger() {
                 >
                   {t("navbar3")}
                 </a>
-                <Link to={"/login"}>admin</Link>
+                <div>
+                  {renderAdmin()}
+                 
+                </div>
                 <div className=" nav_btn ">
                   <div className="  ">
                     {i18n.language === "en" ? (
@@ -89,6 +112,13 @@ export default function Burger() {
           </div>
         </div>
       </label>
+      <AlertDialogSlide
+        openAlert={props.open}
+        cancelAction={props.handelCancelLogout}
+        Action={props.HandleLogout}
+        title={t("Logout")}
+        message={t("Are you sure you want to logout?")}
+      />
     </div>
   );
 }

@@ -6,16 +6,15 @@ import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import Cookies from "js-cookie";
 import { useNavigate } from "react-router-dom";
-import AlertDialogSlide from "../Dialog";
+import AlertDialogSlide from "../MUI/Dialog";
 
 function Navbar(props) {
-   const navigate = useNavigate();
+  const navigate = useNavigate();
   // adding the states
   const [isActive, setIsActive] = useState(false);
   const [t, i18n] = useTranslation();
   const [admin, setAdmin] = useState(null);
   const [open, setOpen] = useState(false);
-
 
   //clean up function to remove the active className
   const removeActive = () => {
@@ -32,44 +31,39 @@ function Navbar(props) {
     window.document.dir = i18n.dir();
   }, [lang, i18n]);
 
- useEffect(() => {
-   const storedAdmin = JSON.parse(localStorage.getItem("AHUThesisAdmin13500"));
-   setAdmin(storedAdmin);
- }, []);
+  useEffect(() => {
+    const storedAdmin = JSON.parse(localStorage.getItem("AHUThesisAdmin13500"));
+    setAdmin(storedAdmin);
+  }, []);
 
-
- const HandleLogout = () => {
-   //Perform any logout logic, such as clearing local storage
-   localStorage.setItem("AHUThesisAdmin13500", null);
-   // Update the admin state to null
-   setAdmin(null);
-   // Use useHistory hook to get the history object
+  const HandleLogout = () => {
+    //Perform any logout logic, such as clearing local storage
+    localStorage.setItem("AHUThesisAdmin13500", null);
+    // Update the admin state to null
+    setAdmin(null);
+    // Use useHistory hook to get the history object
     props.updateAdmin(null);
-   // Navigate to the desired route
-   navigate("/");
- };
-const handelCancelLogout = () => {
-  setOpen(false);
-
-}
- const renderAdmin = () => {
-  if (admin && admin !== null) {
-     return (
-       <div className="adminbtn" onClick={() => setOpen(true)}>
-         {t("Logout")}
-       </div>
-     );
-  } else {
-   return (
-     <Link className="admin-link" to={"/login"}>
-      
-       {t("Admin")}
-     </Link>
-   );
-  }
- }
-
- 
+    // Navigate to the desired route
+    navigate("/");
+  };
+  const handelCancelLogout = () => {
+    setOpen(false);
+  };
+  const renderAdmin = () => {
+    if (admin && admin !== null) {
+      return (
+        <div className="adminbtn" onClick={() => setOpen(true)}>
+          {t("Logout")}
+        </div>
+      );
+    } else {
+      return (
+        <Link className="admin-link" to={"/login"}>
+          {t("Admin")}
+        </Link>
+      );
+    }
+  };
 
   return (
     <div className="App">
@@ -124,7 +118,14 @@ const handelCancelLogout = () => {
           </div>
           <div className="adminbtn">{renderAdmin()}</div>
           <div className={`hamburger `}>
-            <Burger />
+            <Burger
+              renderAdmin={renderAdmin}
+              open={open}
+              setOpen={setOpen}
+              admin={admin}
+              HandleLogout={HandleLogout}
+              handelCancelLogout={handelCancelLogout}
+            />
           </div>
         </nav>
       </header>

@@ -6,11 +6,10 @@ import Footer from "../Components/Footer/Footer.jsx";
 import AddThesis from "../Components/Thesis/AddThesis.jsx";
 
 function AddThesisPage(props) {
-
   return (
     <div>
       <Navbar updateAdmin={props.updateAdmin} />
-<AddThesis/>
+      <AddThesis />
       <Footer />
     </div>
   );

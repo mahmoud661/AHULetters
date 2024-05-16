@@ -23,6 +23,8 @@ export default function AddThesis() {
     thesisPdf: null, // Store full thesis PDF as binary data
     shortThesisPdf: null, // Store short thesis PDF as binary data
   });
+    const [allFieldsFilled, setAllFieldsFilled] = useState(false);
+
 
   const [t] = useTranslation();
 
@@ -60,12 +62,30 @@ export default function AddThesis() {
       setError("Error updating thesis. Please try again later.");
     }
   };
-
+const checkAllFieldsFilled = () => {
+  // Check if all required fields are filled
+  const requiredFields = [
+    "title",
+    "researcher",
+    "year",
+    "collage",
+    "department",
+    "supervisor",
+    "semester",
+    "academicYear",
+    
+  ];
+  const isAllFilled = requiredFields.every(
+    (field) => thesis[field]
+  );
+  setAllFieldsFilled(isAllFilled);
+};
   const handleInputChange = (e, field) => {
     setThesis({
       ...thesis,
       [field]: e.target.value,
     });
+    checkAllFieldsFilled();
   };
 
   const handleFileInputChange = (e, field) => {
@@ -99,6 +119,7 @@ export default function AddThesis() {
         handleInputChange={handleInputChange}
         handleFileInputChange={handleFileInputChange}
         handleAddThesis={handleAdd}
+        allFieldsFilled={allFieldsFilled}
       />
     </div>
   );

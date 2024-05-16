@@ -10,8 +10,11 @@ export default function SearchBar(props) {
   const [input, setInput] = useState("");
   const [tags, setTags] = useState([]);
   const [selectedFilters, setSelectedFilters] = useState("");
-    const [departments, setDepartments] = useState([]);
-
+  const [departments, setDepartments] = useState([
+    "Department A",
+    "Department B",
+    "Department C",
+  ]);
 
   const [collegeTag, setCollegeTag] = useState("");
   const [departmentTag, setDepartmentTag] = useState("");
@@ -22,36 +25,36 @@ export default function SearchBar(props) {
   };
   const [searchVisible, setSearchVisible] = useState(false);
 
- const handleSelectChange = (e, selectType) => {
-   const selectedOption = e.target.value;
-   if (selectedOption !== "") {
-     switch (selectType) {
-       case "college":
-         setCollegeTag(selectedOption);
-         if (selectedOption === "empty") {
-           setDepartments(["Department A", "Department B", "Department C"]);
-         } else {
-           switch (selectedOption) {
-             case "العلوم":
-               setDepartments(["الفيزياء", "الكيمياء", "البيولوجيا"]);
-               break;
-             case "العلوم التربوية":
-               setDepartments(["التربية الأساسية", "التربية الخاصة"]);
-               break;
-             // Add cases for other colleges as needed
-             default:
-               break;
-           }
-         }
-         break;
-       case "department":
-         setDepartmentTag(selectedOption);
-         break;
-       default:
-         break;
-     }
-   }
- };
+  const handleSelectChange = (e, selectType) => {
+    const selectedOption = e.target.value;
+    if (selectedOption !== "") {
+      switch (selectType) {
+        case "college":
+          setCollegeTag(selectedOption);
+          if (selectedOption === "empty") {
+            setDepartments(["Department A", "Department B", "Department C"]);
+          } else {
+            switch (selectedOption) {
+              case "العلوم":
+                setDepartments(["الفيزياء", "الكيمياء", "البيولوجيا"]);
+                break;
+              case "العلوم التربوية":
+                setDepartments(["التربية الأساسية", "التربية الخاصة"]);
+                break;
+              // Add cases for other colleges as needed
+              default:
+                break;
+            }
+          }
+          break;
+        case "department":
+          setDepartmentTag(selectedOption);
+          break;
+        default:
+          break;
+      }
+    }
+  };
 
   const toggleSearchVisibility = () => {
     setSearchVisible(!searchVisible);
@@ -80,7 +83,7 @@ export default function SearchBar(props) {
   const handleClearfilter = () => {
     setCollegeTag("");
     setDepartmentTag("");
-     setDepartments(["Department A", "Department B", "Department C"]);
+    setDepartments(["Department A", "Department B", "Department C"]);
     // You can also reset the select elements to their first options
     const departmentSelect = document.getElementById("departmentSelect");
     if (departmentSelect) {
@@ -101,10 +104,8 @@ export default function SearchBar(props) {
     if (selectedFilters === filterName) {
       if (filterName === "year") {
         setSelectedFilters("yearDesc");
-        
       } else if (filterName === "yearDesc") {
         setSelectedFilters("year");
-       
       } else if (filterName === "alphabet") {
         setSelectedFilters("alphabetDesc");
       } else if (filterName === "alphabetDesc") {
@@ -119,8 +120,6 @@ export default function SearchBar(props) {
       }
     }
   };
-
-
 
   useEffect(() => {
     props.onSortTagChange(selectedFilters);
@@ -208,18 +207,19 @@ export default function SearchBar(props) {
             }`}
             onChange={(e) => handleSelectChange(e, "college")}
           >
-            <option value={"empty"}>{t("Select college...")}</option>
-            <option value="العلوم">العلوم</option>
-            <option value="العلوم التربوية">العلوم التربوية</option>
-            <option value="تكنولوجيا المعلومات">تكنولوجيا المعلومات</option>
-            <option value="الهندسة">الهندسة</option>
-            <option value="الاداب">الاداب</option>
-            <option value="القانون">القانون</option>
-            <option value="البتراء للسياحة الاثار">
-              البتراء للسياحة الاثار
-            </option>
-            <option value="الاميرة عائشة لتمريض">الاميرة عائشة لتمريض</option>
-
+           
+              <option value={"empty"}>{t("Select college...")}</option>
+              <option value="العلوم">العلوم</option>
+              <option value="العلوم التربوية">العلوم التربوية</option>
+              <option value="تكنولوجيا المعلومات">تكنولوجيا المعلومات</option>
+              <option value="الهندسة">الهندسة</option>
+              <option value="الاداب">الاداب</option>
+              <option value="القانون">القانون</option>
+              <option value="البتراء للسياحة الاثار">
+                البتراء للسياحة الاثار
+              </option>
+              <option value="الاميرة عائشة لتمريض">الاميرة عائشة لتمريض</option>
+           
             {/* Add more options as needed */}
           </select>
           <select

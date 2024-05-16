@@ -6,12 +6,14 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import Slide from "@mui/material/Slide";
+import { useTranslation } from "react-i18next";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
 export default function AlertDialogSlide(props) {
+  const {t} = useTranslation();
   const [open, setOpen] = React.useState(props.openAlert);
 
 React.useEffect(() => {
@@ -43,7 +45,7 @@ React.useEffect(() => {
         </DialogContent>
         <DialogActions>
           <Button style={{ color: "#e0af14" }} onClick={props.cancelAction}>
-            Cancel
+            {t("Cancel")}
           </Button>
           <Button
             style={{ color: "red" }}
@@ -52,7 +54,7 @@ React.useEffect(() => {
               props.Action();
             }}
           >
-            Ok
+            {t("Ok")}
           </Button>
         </DialogActions>
       </Dialog>

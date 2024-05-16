@@ -213,7 +213,7 @@ export default function LetterContainerAdmin({
         variant="contained"
         style={{ backgroundColor: "#e0af14", color: "#ffffff" }}
       >
-        Add
+        {t("Add")}
       </Button></Link>
       <div className="letter_contanier">
         {loading ? ( // Conditionally render loading message
