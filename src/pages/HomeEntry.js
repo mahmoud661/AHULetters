@@ -1,11 +1,11 @@
 import "../App.css";
 import { useState } from "react";
-import LetterContainerAdmin from "../Components/LetterContanier/letterContainerAdmin.jsx";
 import Navbar from "../Components/NavBar/NavBar.jsx";
 import SearchBar from "../Components/Search/SearchBar.jsx";
 import Footer from "../Components/Footer/Footer.jsx";
+import LetterContainerEntry from "../Components/LetterContanier/letterContainerEntry.jsx";
 
-function HomeAdmin(props) {
+function HomeEntry(props) {
   const [tags, setTags] = useState([]);
   const [sortTags, setSorttags] = useState([]);
   const [collageTags, setCollageTags] = useState("");
@@ -34,7 +34,7 @@ function HomeAdmin(props) {
         
       />
 
-      <LetterContainerAdmin
+      <LetterContainerEntry
         tags={tags}
         sortTag={sortTags}
         collageTag={collageTags}
@@ -45,4 +45,4 @@ function HomeAdmin(props) {
   );
 }
 
-export default HomeAdmin;
+export default HomeEntry;

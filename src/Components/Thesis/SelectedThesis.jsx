@@ -1,14 +1,21 @@
 import "./SelectedThesis.css";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Alert } from "@mui/material";
+import { Alert , Button } from "@mui/material";
 import { Navigate } from "react-router-dom";
+import CircularProgress from "@mui/material/CircularProgress";
+import Box from "@mui/material/Box";
+import PDfView from "./pdfView";
+
 
 export default function SelectedThesis({ ThesisId }) {
   const [thesis, setThesis] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [redirectHome, setRedirectHome] = useState(false); // State for redirection
+  const [viewPDF, setViewPDF] = useState(false);
+    const [pdffile, setPdfFile] = useState(null);
+
 
   useEffect(() => {
     const fetchThesis = async () => {
@@ -44,6 +51,7 @@ export default function SelectedThesis({ ThesisId }) {
 
             // Replace buffer data with file object
             data.thesisPdf.data = file;
+            setPdfFile(file);
           } catch (error) {
             console.error("Error fetching thesis:", error);
           }
@@ -107,7 +115,23 @@ export default function SelectedThesis({ ThesisId }) {
         </div>
       ) : null}
       {loading || error ? (
-        <div>{t("Loading")}...</div>
+        <Box sx={{ display: "flex" }}>
+          <CircularProgress style={{ color: "#e0af14" }} />
+        </Box>
+      ) : viewPDF ? (
+        <div className="Thesis1">
+          <Button
+            style={{ backgroundColor: "#e01d0f" }}
+            variant="contained"
+            onClick={() => {
+              setViewPDF(false);
+            }}
+          >
+            {t("Go back")}
+          </Button>
+
+          <PDfView file={pdffile} />
+        </div>
       ) : (
         <div className="Thesis1">
           <div
@@ -204,38 +228,11 @@ export default function SelectedThesis({ ThesisId }) {
                 if (!thesis.thesisPdf || !thesis.thesisPdf.data) {
                   return;
                 }
-                const pdfData = thesis.thesisPdf.data;
 
-                if (pdfData instanceof Blob) {
-                  const pdfUrl = URL.createObjectURL(pdfData);
-                  window.open(pdfUrl, "_blank");
-                } else if (typeof pdfData === "string") {
-                  window.open(pdfData, "_blank");
-                } else if (
-                  pdfData instanceof ArrayBuffer ||
-                  pdfData instanceof Uint8Array
-                ) {
-                  // Convert ArrayBuffer or Uint8Array to Blob
-                  const blob = new Blob([pdfData], {
-                    type: "application/pdf",
-                  });
-                  const pdfUrl = URL.createObjectURL(blob);
-                  window.open(pdfUrl, "_blank");
-                } else {
-                  console.error("Invalid PDF data format");
-                }
+                setViewPDF(true);
               }}
             >
-              <svg
-                className="svgIcon"
-                viewBox="0 0 384 512"
-                height="1em"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path d="M169.4 470.6c12.5 12.5 32.8 12.5 45.3 0l160-160c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L224 370.8 224 64c0-17.7-14.3-32-32-32s-32 14.3-32 32l0 306.7L54.6 265.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l160 160z"></path>
-              </svg>
-              <span className="icon2"></span>
-              <span className="tooltip_D">{t("Download")}</span>
+              <div style={{ color: "#fff" }}>{t("view")}</div>
             </button>
           </div>
         </div>

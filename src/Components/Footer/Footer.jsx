@@ -65,7 +65,7 @@ export default function Footer() {
           </ul>
         </div>
         <div className="info">
-          <div className="copyright">2024 Copyright &copy; Mahmoud Zuriqi</div>
+          <div className="copyright">2024 Copyright &copy;</div>
         </div>
       </footer>
     );

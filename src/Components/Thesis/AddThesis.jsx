@@ -47,7 +47,13 @@ export default function AddThesis() {
           }
         }
       }
-
+      // Retrieve and append admin data
+      const adminData = JSON.parse(localStorage.getItem("AHUThesisAdmin13500"));
+      if (!adminData || !adminData.Admin) {
+        throw new Error("Admin data not found in localStorage");
+      }
+      formData.append("editBy", adminData.Admin._id);
+      
       const response = await fetch("http://localhost:13500/addThesis", {
         method: "POST",
         body: formData,

@@ -7,7 +7,11 @@ import "@react-pdf-viewer/page-navigation/lib/styles/index.css";
 import { toolbarPlugin } from "@react-pdf-viewer/toolbar";
 import "@react-pdf-viewer/toolbar/lib/styles/index.css";
 import { zoomPlugin } from "@react-pdf-viewer/zoom";
-
+import { selectionModePlugin } from "@react-pdf-viewer/selection-mode";
+import { useEffect } from "react";
+import { useTranslation } from "react-i18next";
+// Import styles
+import "@react-pdf-viewer/selection-mode/lib/styles/index.css";
 // Import styles
 import "@react-pdf-viewer/zoom/lib/styles/index.css";
 
@@ -18,7 +22,8 @@ export default function PDFView(props) {
   // Create the page navigation plugin instance
   const toolbarPluginInstance = toolbarPlugin();
   const zoomPluginInstance = zoomPlugin();
-
+  const { t } = useTranslation();
+const selectionModePluginInstance = selectionModePlugin({selectionMode:"hand"});
   const pageNavigationPluginInstance = pageNavigationPlugin();
   const {
     GoToFirstPage,
@@ -29,11 +34,21 @@ export default function PDFView(props) {
     NumberOfPages,
   } = pageNavigationPluginInstance;
   const { CurrentScale, ZoomIn, ZoomOut } = zoomPluginInstance;
-
+useEffect(() => {
+  // Disable text selection for elements
+  // with class "no-select"
+  const noSelectElements = document.querySelectorAll(".no-select");
+  noSelectElements.forEach((element) => {
+    element.style.webkitUserSelect = "none";
+    element.style.mozUserSelect = "none";
+    element.style.msUserSelect = "none";
+    element.style.userSelect = "none";
+  });
+}, []);
   return (
-    <div className="ThesisView">
+    <div className="ThesisView no-select">
       <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.4.120/build/pdf.worker.min.js">
-        <div className="pdf_viewer_toolbar">
+        <div className="pdf_viewer_toolbar no-select">
           <div>
             <ZoomOut>
               {(props) => (
@@ -48,7 +63,7 @@ export default function PDFView(props) {
                   }}
                   onClick={props.onClick}
                 >
-                  Zoom Out
+                  {t("Zoom Out")}
                 </button>
               )}
             </ZoomOut>
@@ -69,7 +84,7 @@ export default function PDFView(props) {
                   }}
                   onClick={props.onClick}
                 >
-                  Zoom In
+                  {t("Zoom In")}
                 </button>
               )}
             </ZoomIn>
@@ -88,7 +103,7 @@ export default function PDFView(props) {
                   }}
                   onClick={props.onClick}
                 >
-                  Go to Previous Page
+                  {t("Previous Page")}
                 </button>
               )}
             </GoToPreviousPage>{" "}
@@ -110,7 +125,7 @@ export default function PDFView(props) {
                   }}
                   onClick={props.onClick}
                 >
-                  Go to Next Page
+                  {t("Next page")}
                 </button>
               )}
             </GoToNextPage>{" "}
@@ -125,11 +140,13 @@ export default function PDFView(props) {
           }}
         >
           <Viewer
+            className="no-select"
             fileUrl={URL.createObjectURL(props.file)}
             plugins={[
               pageNavigationPluginInstance,
               toolbarPluginInstance,
               zoomPluginInstance,
+              selectionModePluginInstance,
             ]}
           />
         </div>

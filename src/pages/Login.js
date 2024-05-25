@@ -40,8 +40,15 @@ export default function Login({ updateAdmin }) {
 
       if (response.ok) {
         const data = await response.json();
-        setResult({msg: "approve"});
-        updateAdmin(data.user); // Assuming data.user contains user information
+        if (data.user.active)
+        {setResult({msg: "approve"});
+        updateAdmin(data.user);// Assuming data.user contains user information 
+      }
+      else{
+        setLoginError("User is not active. Please contact the admin.");
+
+      }
+        
       } else {
         setLoginError("Invalid email or password.");
         console.error("Login failed");
@@ -65,7 +72,14 @@ export default function Login({ updateAdmin }) {
     <div>
       <Navbar updateAdmin={updateAdmin} />
       {loginError && (
-        <Alert className="error" severity="error">
+        <Alert
+          onClose={() => {
+            setLoginError("");
+          }}
+          style={{ backgroundColor: "#10060D", color: "white" }}
+          className="error"
+          severity="error"
+        >
           {loginError}
         </Alert>
       )}

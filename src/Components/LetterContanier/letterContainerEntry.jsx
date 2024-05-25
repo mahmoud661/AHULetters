@@ -3,13 +3,11 @@ import { useState, useEffect } from "react";
 import ScrollAnimation from "../scrollanimate.jsx";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import Cookies from "js-cookie";
-import { Alert } from "@mui/material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
-import {  Button, Pagination, Stack } from "@mui/material";
+import Cookies from "js-cookie";
+import { Alert, Button, Pagination, Stack } from "@mui/material";
 import PaginationItem from "@mui/material/PaginationItem";
-
 // Function to remove diacritics from Arabic text
 const removeDiacritics = (text) => {
   if (!text) return "";
@@ -19,7 +17,7 @@ const removeDiacritics = (text) => {
     : text;
 };
 
-export default function LetterContainer({
+export default function LetterContainerEntry({
   tags,
   sortTag,
   collageTag,
@@ -41,7 +39,6 @@ export default function LetterContainer({
       }
       setError(null);
       return await response.json();
-      
     } catch (error) {
       setError(t("error1"));
     }
@@ -64,52 +61,30 @@ export default function LetterContainer({
     if (!letters) {
       return [];
     }
-    return letters
-      .filter((letter) => {
-        // If tags array is empty, return true for all letters
-        if (tags.length === 0) {
-          return true;
-        }
+    return letters.filter((letter) => {
+      // Check if the letter matches any of the collage tags
+      const collageMatches =
+        collageTag.length > 0 && collageTag[0] !== "empty"
+          ? collageTag.some(
+              (tag) =>
+                removeDiacritics(letter.collage).toLowerCase() ===
+                removeDiacritics(tag).toLowerCase()
+            )
+          : true;
 
-        // Check if all tags are included in the letter properties
-        return tags.every((tag) =>
-          Object.values(letter).some((value) => {
-            // Convert numbers to strings for comparison
-            const stringValue = String(value);
-            // Remove diacritics from both tag and value before comparison
-            const normalizedTag = removeDiacritics(tag);
-            const normalizedValue = removeDiacritics(stringValue);
+      // Check if the letter matches any of the department tags
+      const departmentMatches =
+        DepartmentTag.length > 0 && DepartmentTag[0] !== "empty"
+          ? DepartmentTag.some(
+              (tag) =>
+                removeDiacritics(letter.department).toLowerCase() ===
+                removeDiacritics(tag).toLowerCase()
+            )
+          : true;
 
-            return normalizedValue
-              .toLowerCase()
-              .includes(normalizedTag.toLowerCase()); // Changed here
-          })
-        );
-      })
-      .filter((letter) => {
-        // Check if the letter matches any of the collage tags
-        const collageMatches =
-          collageTag.length > 0 && collageTag[0] !== "empty"
-            ? collageTag.some(
-                (tag) =>
-                  removeDiacritics(letter.collage).toLowerCase() ===
-                  removeDiacritics(tag).toLowerCase()
-              )
-            : true;
-
-        // Check if the letter matches any of the department tags
-        const departmentMatches =
-          DepartmentTag.length > 0 && DepartmentTag[0] !== "empty"
-            ? DepartmentTag.some(
-                (tag) =>
-                  removeDiacritics(letter.department).toLowerCase() ===
-                  removeDiacritics(tag).toLowerCase()
-              )
-            : true;
-
-        // Return true if either collage or department match
-        return collageMatches && departmentMatches;
-      });
+      // Return true if either collage or department match
+      return collageMatches && departmentMatches;
+    });
   };
 
   // Function to sort letters based on sortTag
@@ -141,28 +116,18 @@ export default function LetterContainer({
   const sortedLetters = sortLetters(filteredLetters);
   const totalSections = Math.ceil(sortedLetters.length / lettersPerPage);
 
-  // Function to handle navigation to a specific section
-  const handleSectionClick = (section) => {
-    setCurrentPage(section);
+  // Function to handle page change
+  const handlePageChange = (event, page) => {
+    setCurrentPage(page);
     // Scroll to the top of the page
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
-
- const handlePageChange = (event, page) => {
-   setCurrentPage(page);
-   // Scroll to the top of the page
-   window.scrollTo({ top: 0, behavior: "smooth" });
- };
-
-  // Effect to reset current section when tags change
+  // Effect to reset current page when tags change
   useEffect(() => {
-    // Reset the current section to 1 whenever any of the filtering or sorting props change
+    // Reset the current page to 1 whenever any of the filtering or sorting props change
     setCurrentPage(1);
   }, [tags, sortTag, collageTag, DepartmentTag]);
-
-  // Function to generate section buttons for the current group of sections
-
 
   return (
     <div className="main_contanier">
@@ -180,6 +145,14 @@ export default function LetterContainer({
         </div>
       ) : null}
       <h1 style={{ color: "#e0af14" }}>{t("thesis")}</h1>
+      <Link to={"/AddThesis"}>
+        <Button
+          variant="contained"
+          style={{ backgroundColor: "#e0af14", color: "#ffffff" }}
+        >
+          {t("Add")}
+        </Button>
+      </Link>
       <div className="letter_contanier">
         {loading ? ( // Conditionally render loading message
           <div className="loading-message empty-message">Loading...</div>

@@ -17,7 +17,7 @@ const ScrollAnimation = ({ children, direction }) => {
 
   useEffect(() => {
     const observer = new IntersectionObserver(handleIntersection, {
-      threshold: 0.5,
+      threshold: 0.1,
     });
 
     const currentTarget = targetRef.current;

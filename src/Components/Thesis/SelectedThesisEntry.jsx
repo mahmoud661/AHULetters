@@ -121,54 +121,32 @@ export default function SelectedThesis({ ThesisId }) {
       [field]: { data: e.target.files[0], contentType: e.target.files[0].type },
     });
   };
-  const handleDelete = async () => {
-    try {
-      const response = await fetch("http://localhost:13500/deleteThesis", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          id: ThesisId,
-          editBy: JSON.parse(localStorage.getItem("AHUThesisAdmin13500")).Admin,
-        }),
-      });
-      setThesis(null); // Clear thesis state after deleting it
-      setRedirectHome(true); // Set redirect state to true after successful deletion
+  
+   const handleHide = async () => {
+     try {
+       const response = await fetch("http://localhost:13500/hideThesis", {
+         method: "POST",
+         headers: {
+           "Content-Type": "application/json",
+         },
+         body: JSON.stringify({
+           id: ThesisId,
+           editBy: JSON.parse(localStorage.getItem("AHUThesisAdmin13500"))
+             .Admin,
+         }),
+       });
+       setThesis(null); // Clear thesis state after deleting it
+       setRedirectHome(true); // Set redirect state to true after successful deletion
 
-      if (!response.ok) {
-        throw new Error("Failed to delete thesis");
-      }
-    } catch (error) {
-      console.error("Error deleting thesis:", error);
-      setError("Error deleting thesis. Please try again later.");
-    }
-    navigate("/"); // Navigate to home page after deleting thesis
-  };
-  const handleHide = async () => {
-    try {
-      const response = await fetch("http://localhost:13500/hideThesis", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          id: ThesisId,
-          editBy: JSON.parse(localStorage.getItem("AHUThesisAdmin13500")).Admin,
-        }),
-      });
-      setThesis(null); // Clear thesis state after deleting it
-      setRedirectHome(true); // Set redirect state to true after successful deletion
-
-      if (!response.ok) {
-        throw new Error("Failed to delete thesis");
-      }
-    } catch (error) {
-      console.error("Error deleting thesis:", error);
-      setError("Error deleting thesis. Please try again later.");
-    }
-    navigate("/"); // Navigate to home page after deleting thesis
-  };
+       if (!response.ok) {
+         throw new Error("Failed to delete thesis");
+       }
+     } catch (error) {
+       console.error("Error deleting thesis:", error);
+       setError("Error deleting thesis. Please try again later.");
+     }
+     navigate("/"); // Navigate to home page after deleting thesis
+   };
   const handleUpdate = async () => {
     try {
       const formData = new FormData();
@@ -385,15 +363,7 @@ export default function SelectedThesis({ ThesisId }) {
               >
                 {t("Hide")}
               </Button>
-              <Button
-                onClick={() => {
-                  setOpen(true);
-                }}
-                variant="contained"
-                style={{ backgroundColor: "#920101", color: "#ffffff" }}
-              >
-                {t("Delete")}
-              </Button>
+             
             </>
           )}
         </div>
@@ -407,15 +377,7 @@ export default function SelectedThesis({ ThesisId }) {
         title={t("Hide thesis")}
         message={t("Are you sure you want to Hide the thesis ?")}
       />
-      <AlertDialogSlide
-        openAlert={open}
-        cancelAction={() => {
-          setOpen(false);
-        }}
-        Action={handleDelete}
-        title={t("Delete thesis")}
-        message={t("Are you sure you want to delete the thesis ?")}
-      />
+    
     </div>
   );
 }

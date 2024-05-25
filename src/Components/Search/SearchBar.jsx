@@ -1,131 +1,193 @@
-import React, { useState } from "react";
-import { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import "./SearchBar.css";
+import MultipleSelect from "../Select/MultySelect";
+import TextField from "@mui/material/TextField";
+
 
 export default function SearchBar(props) {
   const [yearSortDirection, setYearSortDirection] = useState("down");
-
   const [t, i18n] = useTranslation();
   const [input, setInput] = useState("");
   const [tags, setTags] = useState([]);
   const [selectedFilters, setSelectedFilters] = useState("");
-  const [departments, setDepartments] = useState([
-    "Department A",
-    "Department B",
-    "Department C",
-  ]);
-
-  const [collegeTag, setCollegeTag] = useState("");
-  const [departmentTag, setDepartmentTag] = useState("");
-  // Add more state variables for other filter options as needed
-
-  const handleInputChange = (e) => {
-    setInput(e.target.value);
-  };
+  const [clearselect, setClearselect] = useState(false);
+  const [collegeTag, setCollegeTag] = useState([]);
+  const [departmentTag, setDepartmentTag] = useState([]);
+  const [supervisorTag, setSupervisorTag] = useState([]);
   const [searchVisible, setSearchVisible] = useState(false);
+  const [startYear, setStartYear] = useState("");
+  const [endYear, setEndYear] = useState("");
 
-  const handleSelectChange = (e, selectType) => {
-    const selectedOption = e.target.value;
-    if (selectedOption !== "") {
-      switch (selectType) {
-        case "college":
-          setCollegeTag(selectedOption);
-          if (selectedOption === "empty") {
-            setDepartments(["Department A", "Department B", "Department C"]);
-          } else {
-            switch (selectedOption) {
-              case "العلوم":
-                setDepartments(["الفيزياء", "الكيمياء", "البيولوجيا"]);
-                break;
-              case "العلوم التربوية":
-                setDepartments(["التربية الأساسية", "التربية الخاصة"]);
-                break;
-              // Add cases for other colleges as needed
-              default:
-                break;
-            }
-          }
-          break;
-        case "department":
-          setDepartmentTag(selectedOption);
-          break;
-        default:
-          break;
-      }
-    }
+  const supervisors = [
+    "Supervisor A",
+    "Supervisor B",
+    "Supervisor C",
+    "Supervisor D",
+  ];
+
+  const colleges = [
+    "العلوم",
+    "العلوم_التربوية",
+    "تكنولوجيا_المعلومات",
+    "الهندسة",
+    "الأداب",
+    "القانون",
+    "البتراء_للسياحة_الاثار",
+    "الاميرة_عائشة_لتمريض",
+    "إدارة_الأعمال",
+  ];
+
+  const collegesWithDepartments = {
+    العلوم: ["الفيزياء", "الكيمياء", "الرياضيات", "العلوم الحياتية"],
+    العلوم_التربوية: [
+      "المناهج والتدريس",
+      "التربية الخاصة",
+      "مواد متطلبات الجامعة",
+    ],
+    الأداب: [
+      "اللغة العربية وآدابها",
+      "الدراسات الإسلامية",
+      "اللغة الإنجليزية وآدابها",
+      "العلاقات الدولية والدراسات الاستراتيجية",
+      "التاريخ والجغرافيا",
+      "علم المكتبات  و تكنولوجيا المعلومات",
+    ],
+    الهندسة: [
+      "الهندسة المدنية",
+      "الهندسة الكهربائية",
+      "الهندسة الميكانيكية",
+      "هندسة الحاسوب",
+      "هندسة التعدين",
+      "الهندسة الكيميائية",
+      "هندسة الأتصالات",
+      "هندسة بيئية",
+    ],
+    تكنولوجيا_المعلومات: [
+      "هندسة البرمجيات",
+      "نظم المعلومات الحاسوبية",
+      "علم الحاسوب",
+      "علم بيانات وذكاء اصطناعي",
+    ],
+    القانون: ["القانون الخاص", "القانون العام"],
+    البتراء_للسياحة_الاثار: ["الاثار", "إدارة الفنادق"],
+    إدارة_الأعمال: [
+      "إدارة الأعمال",
+      "نظم المعلومات الإدارية",
+      "الإقتصاد",
+      "المحاسبة والعلوم المالية والمصرفية",
+    ],
+    الاميرة_عائشة_لتمريض: ["التصوير الإشعاعي", "التحاليل الطبية", "التمريض"],
   };
 
-  const toggleSearchVisibility = () => {
-    setSearchVisible(!searchVisible);
-    const button = document.querySelector(".searchButton");
-    button.classList.toggle("down", !searchVisible);
-    button.classList.toggle("up", searchVisible);
-  };
+  const [departments, setDepartments] = useState(() => {
+    return Object.values(collegesWithDepartments).flat();
+  });
+
+  const handleInputChange = (e) => setInput(e.target.value);
+
   const handleSearch = () => {
-    if (input !== "") {
-      setTags([...tags, input]);
+    if (input) {
+      const newTags = [...tags, input];
+      setTags(newTags);
       setInput("");
-
-      props.onTagsChange([...tags, input]);
+      props.onTagsChange(newTags);
     }
   };
 
   const handleDelete = (tagToDelete) => {
-    setTags(tags.filter((tag) => tag !== tagToDelete));
-    props.onTagsChange(tags.filter((tag) => tag !== tagToDelete));
+    const newTags = tags.filter((tag) => tag !== tagToDelete);
+    setTags(newTags);
+    props.onTagsChange(newTags);
   };
 
   const handleClearAll = () => {
     setTags([]);
     props.onTagsChange([]);
   };
-  const handleClearfilter = () => {
-    setCollegeTag("");
-    setDepartmentTag("");
-    setDepartments(["Department A", "Department B", "Department C"]);
-    // You can also reset the select elements to their first options
-    const departmentSelect = document.getElementById("departmentSelect");
-    if (departmentSelect) {
-      departmentSelect.value = "empty";
-    }
-    const collegeSelect = document.getElementById("collegeSelect");
-    if (collegeSelect) {
-      collegeSelect.value = "empty";
-    }
+
+  const handleClearFilter = () => {
+    setCollegeTag([]);
+    setDepartmentTag([]);
+    setSupervisorTag([]);
+    setDepartments(Object.values(collegesWithDepartments).flat());
+    setClearselect(true);
+    setTimeout(() => setClearselect(false), 0);
   };
 
-  const handleClearSort = () => {
-    setSelectedFilters("");
+  const handleClearSort = () => setSelectedFilters("");
+
+  const handleSelectChange = (value, selectType) => {
+    switch (selectType) {
+      case "collage":
+        setCollegeTag(value);
+        if (value.length === 0) {
+          setDepartments(Object.values(collegesWithDepartments).flat());
+        } else {
+          const newDepartments = value.flatMap(
+            (college) => collegesWithDepartments[college] || []
+          );
+          setDepartments(newDepartments);
+        }
+        break;
+      case "department":
+        setDepartmentTag(value);
+        break;
+      case "supervisor":
+        setSupervisorTag(value);
+        break;
+      default:
+        break;
+    }
   };
 
   const handleFilterChange = (filterName) => {
-    // Toggle the filter on/off
     if (selectedFilters === filterName) {
-      if (filterName === "year") {
-        setSelectedFilters("yearDesc");
-      } else if (filterName === "yearDesc") {
-        setSelectedFilters("year");
-      } else if (filterName === "alphabet") {
-        setSelectedFilters("alphabetDesc");
-      } else if (filterName === "alphabetDesc") {
-        setSelectedFilters("alphabet");
-      } else {
-        setSelectedFilters("");
+      switch (filterName) {
+        case "year":
+          setSelectedFilters("yearDesc");
+          break;
+        case "yearDesc":
+          setSelectedFilters("year");
+          break;
+        case "alphabet":
+          setSelectedFilters("alphabetDesc");
+          break;
+        case "alphabetDesc":
+          setSelectedFilters("alphabet");
+          break;
+        default:
+          setSelectedFilters("");
+          break;
       }
     } else {
       setSelectedFilters(filterName);
-      if (filterName === "year") {
-        setYearSortDirection("up");
-      }
+      if (filterName === "year") setYearSortDirection("up");
     }
+  };
+
+  const handleYearRangeChange = (e) => {
+    const { name, value } = e.target;
+    if (name === "startYear") {
+      setStartYear(value);
+    } else if (name === "endYear") {
+      setEndYear(value);
+    }
+  };
+
+  const toggleSearchVisibility = () => {
+    setSearchVisible((prev) => !prev);
+    const button = document.querySelector(".searchButton");
+    button.classList.toggle("down", !searchVisible);
+    button.classList.toggle("up", searchVisible);
   };
 
   useEffect(() => {
     props.onSortTagChange(selectedFilters);
     props.onCollageTagChange(collegeTag);
     props.onDepartmentTagChange(departmentTag);
-  });
+    //props.onYearRangeChange({ startYear, endYear });
+  }, [selectedFilters, collegeTag, departmentTag, startYear, endYear]);
 
   return (
     <div className={"searchDiv " + (searchVisible ? "btnIn" : "btnOut")}>
@@ -137,11 +199,7 @@ export default function SearchBar(props) {
               className="input"
               value={input}
               onChange={handleInputChange}
-              onKeyDown={(e) => {
-                if (e.key === "Enter") {
-                  handleSearch();
-                }
-              }}
+              onKeyDown={(e) => e.key === "Enter" && handleSearch()}
             />
             <svg
               className="iconn"
@@ -185,56 +243,26 @@ export default function SearchBar(props) {
         </div>
         <div className="Search_filter">
           <span>{t("Filter by")}:</span>
-
-          <select
-            id="departmentSelect"
-            className={`filter_btn ${
-              selectedFilters.includes("department") ? "selected" : ""
-            }`}
-            onChange={(e) => handleSelectChange(e, "department")}
-          >
-            <option value="empty">{t("Select department...")}</option>
-            {departments.map((department, index) => (
-              <option key={index} value={department}>
-                {department}
-              </option>
-            ))}
-          </select>
-          <select
-            id="collegeSelect"
-            className={`filter_btn filter_select ${
-              selectedFilters.includes("college") ? "selected" : ""
-            }`}
-            onChange={(e) => handleSelectChange(e, "college")}
-          >
-           
-              <option value={"empty"}>{t("Select college...")}</option>
-              <option value="العلوم">العلوم</option>
-              <option value="العلوم التربوية">العلوم التربوية</option>
-              <option value="تكنولوجيا المعلومات">تكنولوجيا المعلومات</option>
-              <option value="الهندسة">الهندسة</option>
-              <option value="الاداب">الاداب</option>
-              <option value="القانون">القانون</option>
-              <option value="البتراء للسياحة الاثار">
-                البتراء للسياحة الاثار
-              </option>
-              <option value="الاميرة عائشة لتمريض">الاميرة عائشة لتمريض</option>
-           
-            {/* Add more options as needed */}
-          </select>
-          <select
-            className={`filter_btn ${
-              selectedFilters.includes("supervisor") ? "selected" : ""
-            }`}
-            onChange={handleSelectChange}
-          >
-            <option value="empty">{t("Select supervisor...")}</option>
-            <option value="Supervisor 1">Supervisor 1</option>
-            <option value="Supervisor 2">Supervisor 2</option>
-            {/* Add more options as needed */}
-          </select>
-          {(collegeTag || departmentTag) && (
-            <button className="clear-all" onClick={handleClearfilter}>
+          <MultipleSelect
+            selectChange={handleSelectChange}
+            options={colleges}
+            selectType="collage"
+            clearSelect={clearselect}
+          />
+          <MultipleSelect
+            selectChange={handleSelectChange}
+            options={departments}
+            selectType="department"
+            clearSelect={clearselect}
+          />
+          <MultipleSelect
+            selectChange={handleSelectChange}
+            options={supervisors}
+            selectType="supervisor"
+            clearSelect={clearselect}
+          />
+          {(collegeTag.length > 0 || departmentTag.length > 0) && (
+            <button className="clear-all" onClick={handleClearFilter}>
               {t("Clear")}
             </button>
           )}
@@ -242,20 +270,13 @@ export default function SearchBar(props) {
         <div className="Search_filter">
           <span>{t("Sort by")}:</span>
           <button
-            className={`filter_btn ${
-              selectedFilters === "alphabet" ||
-              selectedFilters === "alphabetDesc"
-                ? "selected"
-                : ""
-            }`}
+            className={`filter_btn ${selectedFilters === "alphabet" || selectedFilters === "alphabetDesc" ? "selected" : ""}`}
             onClick={() => handleFilterChange("alphabet")}
           >
             {selectedFilters === "alphabet" ? t("A-Z") : t("Z-A")}
           </button>
           <button
-            className={`filter_btn ${
-              selectedFilters === "year" ? "down" : "up"
-            } ${selectedFilters.includes("year") ? "selected" : ""}`}
+            className={`filter_btn ${selectedFilters === "year" ? "down" : "up"} ${selectedFilters.includes("year") ? "selected" : ""}`}
             onClick={() =>
               handleFilterChange(
                 selectedFilters === "year" ? "year" : "yearDesc"
@@ -271,8 +292,35 @@ export default function SearchBar(props) {
             </button>
           )}
         </div>
-      </div>
+        <div className="Search_filter">
+          <span>{t("Year Range")}:</span>
 
+          <input
+            type="number"
+            name="startYear"
+            placeholder={t("From")}
+            value={startYear}
+            onChange={handleYearRangeChange}
+            className="year-input"
+          />
+          <TextField
+            onChange={handleYearRangeChange}
+            id="standard-basic"
+            label={t("From")}
+            variant="standard"
+            value={endYear}
+          />
+          <input
+            type="number"
+            name="endYear"
+            placeholder={t("To")}
+            value={endYear}
+            onChange={handleYearRangeChange}
+            className="year-input"
+          />
+          <TextField id="standard-basic" label={t("To")} variant="standard" />
+        </div>
+      </div>
       <button className={"searchButton up"} onClick={toggleSearchVisibility}>
         {t("Search")}
       </button>

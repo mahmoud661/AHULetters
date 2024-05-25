@@ -8,10 +8,12 @@ import Login from "./pages/Login";
 import ThesisAdmin from "./pages/ThesisPageAdmin";
 import AddThesisPage from "./pages/AddThesis";
 import HomeAdmin from "./pages/HomeAdmin";
-import { Worker } from "@react-pdf-viewer/core";
+import ThesisEntry from "./pages/ThesisPageEntry";
+import DashBoardPage from "./pages/DashBoardPage";
+import { Navigate } from "react-router-dom";
+import HomeEntry from "./pages/HomeEntry";
 function App() {
   const [admin, setLoginAdmin] = useState(null);
-
   useEffect(() => {
     const storedUser = JSON.parse(localStorage.getItem("AHUThesisAdmin13500"));
     if (storedUser && storedUser.date) {
@@ -24,7 +26,7 @@ function App() {
         setLoginAdmin(null);
         localStorage.setItem("AHUThesisAdmin13500", null);
       } else {
-        setLoginAdmin(storedUser.user);
+        setLoginAdmin(storedUser.Admin);
       }
     } else {
       setLoginAdmin(null);
@@ -50,7 +52,11 @@ function App() {
         path="/"
         element={
           admin !== null ? (
-            <HomeAdmin updateAdmin={updateAdmin} />
+            admin.role === "admin" ? (
+              <HomeAdmin updateAdmin={updateAdmin} />
+            ) : (
+              <HomeEntry updateAdmin={updateAdmin} />
+            )
           ) : (
             <Home updateAdmin={updateAdmin} />
           )
@@ -60,9 +66,11 @@ function App() {
         path="/thesis/:ThesisId"
         element={
           admin !== null ? (
-            <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.4.120/build/pdf.worker.min.js">
+            admin.role === "admin" ? (
               <ThesisAdmin updateAdmin={updateAdmin} />
-            </Worker>
+            ) : (
+              <ThesisEntry updateAdmin={updateAdmin} />
+            )
           ) : (
             <Thesis updateAdmin={updateAdmin} />
           )
@@ -75,6 +83,20 @@ function App() {
         element={
           admin !== null ? (
             <AddThesisPage updateAdmin={updateAdmin} />
+          ) : (
+            <Home updateAdmin={updateAdmin} />
+          )
+        }
+      />
+      <Route
+        path="/DashBoard"
+        element={
+          admin !== null ? (
+            admin.role === "admin" ? (
+              <DashBoardPage updateAdmin={updateAdmin} />
+            ) : (
+              <Navigate to="/" />
+            )
           ) : (
             <Home updateAdmin={updateAdmin} />
           )

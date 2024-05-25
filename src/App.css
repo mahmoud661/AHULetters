@@ -45,6 +45,7 @@ body{
 .page{
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
   flex-wrap: wrap;
   position: relative;
 }
@@ -64,3 +65,9 @@ body{
   transition: opacity 0.3s, transform 0.8s;
 }
 
+.notify{
+  position: fixed;
+  bottom: 10%;
+  left: 5%;
+  z-index: 500;
+}
