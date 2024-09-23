@@ -2,7 +2,6 @@
   display: flex;
   flex-direction:column ;
   gap: 30px;
-  justify-content: center;
   align-items: center;
   margin-top: 20px;
   min-height: 50vh;
@@ -63,7 +62,7 @@
  opacity: 0;
 }
 .section_active{
-  background-color: #e0af14;
+  background-color: #3a73c2;
   color: white;
  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
   
@@ -115,11 +114,11 @@ background-position: calc(0% - 1px) calc(100% + 1px);
 .card:hover {
   transform: scale(1.05);
   box-shadow: 0 0.5rem 1rem rgba(17, 24, 39, 0.1);
-  border: 1px solid #e0af14;
+  border: 1px solid #3a73c2;
 }
 .letter {
-  width: fit-content;
   height: fit-content;
+  width: fit-content;
 }
 
 .header {
@@ -140,7 +139,7 @@ background-position: calc(0% - 1px) calc(100% + 1px);
 }
 
 .title:hover {
-  text-decoration: underline #e0af14;
+  text-decoration: underline #3a73c2;
 }
 
 .name {
@@ -198,9 +197,9 @@ background-position: calc(0% - 1px) calc(100% + 1px);
 .btn-conteiner {
   display: flex;
   justify-content: center;
-  --color-text: #e0af14;
+  --color-text: #3a73c2;
   --color-background: #353535;
-  --color-outline: #e0af14;
+  --color-outline: #3a73c2;
   --color-shadow: #00000080;
   
 }

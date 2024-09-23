@@ -1,10 +1,25 @@
 import React, { useEffect } from "react";
-import { useTheme } from "@mui/material/styles";
+import {  ThemeProvider } from "@mui/material/styles";
 import OutlinedInput from "@mui/material/OutlinedInput";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
+import "../../App.css";
+import { createTheme } from "@mui/material/styles";
+import { useTranslation } from "react-i18next";
+
+const themeNew = createTheme({
+  palette: {
+    primary: {
+      light: "#000",
+      main: "#3a73c2",
+      dark: "#000",
+      contrastText: "#fff",
+    },
+   
+  },
+});
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -27,58 +42,58 @@ function getStyles(name, personName, theme) {
 }
 
 export default function MultipleSelect(props) {
+  const {t} = useTranslation()
   const option = props.options;
-  const theme = useTheme();
   const [personName, setPersonName] = React.useState([]);
 
   const handleChange = (event) => {
     const {
       target: { value },
     } = event;
-    setPersonName(
-      // On autofill we get a stringified value.
-      typeof value === "string" ? value.split(",") : value
-    );
+    setPersonName(typeof value === "string" ? value.split(",") : value);
     props.selectChange(
       typeof value === "string" ? value.split(",") : value,
       props.selectType
     );
   };
 
-  // Effect to clear selection when clearSelect prop changes
   useEffect(() => {
     if (props.clearSelect) {
       setPersonName([]);
     }
   }, [props.clearSelect, props.selectType, props.selectChange]);
-
   return (
-    <div>
+    <ThemeProvider theme={themeNew}>
       <FormControl sx={{ m: 1, width: 190 }}>
         <InputLabel id="demo-multiple-name-label">
-          {props.selectType}
+          {t(props.selectType)}
         </InputLabel>
         <Select
           labelId="demo-multiple-name-label"
           id="demo-multiple-name"
           multiple
           value={personName}
+          className="multiple-select"
           onChange={handleChange}
-          input={<OutlinedInput label={props.selectType} />}
+          input={<OutlinedInput label={t(props.selectType)} />}
           MenuProps={MenuProps}
-          style={{ width: "100%", height: "50px" }}
+          sx={{
+            width: "100%",
+            height: "50px",
+            color: themeNew.palette.primary.main,
+          }}
         >
           {option.map((name) => (
             <MenuItem
               key={name}
               value={name}
-              style={getStyles(name, personName, theme)}
+              style={getStyles(name, personName, themeNew)}
             >
               {name}
             </MenuItem>
           ))}
         </Select>
       </FormControl>
-    </div>
+    </ThemeProvider>
   );
 }

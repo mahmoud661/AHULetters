@@ -202,7 +202,7 @@ export default function AddControl(props) {
       <Button
         onClick={props.handleAddThesis}
         variant="contained"
-        style={{ backgroundColor: "#e0af14", color: "#ffffff" }}
+        style={{ backgroundColor: "#3a73c2", color: "#ffffff" }}
         disabled={!props.allFieldsFilled} // Disable button if any required field is empty
       >
         {t("Add")}

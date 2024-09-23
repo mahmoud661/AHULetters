@@ -340,19 +340,19 @@ export default function DashBoard(props) {
                         </div>
                         <div>
                           {t("Action")}:{" "}
-                          <span style={{ color: "#e0af14" }}>
+                          <span style={{ color: "#3a73c2" }}>
                             {report.operation}
                           </span>
                         </div>
                         <div>
                           {t("Action by")}:
-                          <span style={{ color: "#e0af14" }}>
+                          <span style={{ color: "#3a73c2" }}>
                             {report.admin}
                           </span>
                         </div>
                         <div>
                           {t("Date")}:{" "}
-                          <span style={{ color: "#e0af14" }}>
+                          <span style={{ color: "#3a73c2" }}>
                             {" "}
                             {new Date(report.dateOfOperation).toLocaleString()}
                           </span>

@@ -44,7 +44,7 @@ React.useEffect(() => {
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button style={{ color: "#e0af14" }} onClick={props.cancelAction}>
+          <Button style={{ color: "#3a73c2" }} onClick={props.cancelAction}>
             {t("Cancel")}
           </Button>
           <Button

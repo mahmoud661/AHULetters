@@ -10,6 +10,11 @@ function HomeEntry(props) {
   const [sortTags, setSorttags] = useState([]);
   const [collageTags, setCollageTags] = useState("");
   const [DepartmentTags, setDepartmentTags] = useState("");
+    const [yearRange, setYearRange] = useState({
+      startYear: null,
+      endYear: null,
+    });
+
   const handleTagsChange = (tags) => {
     setTags(tags);
   };
@@ -22,16 +27,18 @@ function HomeEntry(props) {
   const handleDepartmentTagChange = (DepartmentTags) => {
     setDepartmentTags(DepartmentTags);
   };
-
+ const handleYearRangeChange = (yearRange) => {
+   setYearRange(yearRange);
+ };
   return (
     <div className="page">
-      <Navbar updateAdmin={props.updateAdmin}/>
+      <Navbar updateAdmin={props.updateAdmin} />
       <SearchBar
         onTagsChange={handleTagsChange}
         onSortTagChange={handleSortTagsChange}
         onCollageTagChange={handelCollageTagChange}
         onDepartmentTagChange={handleDepartmentTagChange}
-        
+        onYearRangeChange={handleYearRangeChange}
       />
 
       <LetterContainerEntry
@@ -39,6 +46,7 @@ function HomeEntry(props) {
         sortTag={sortTags}
         collageTag={collageTags}
         DepartmentTag={DepartmentTags}
+        yearRange={yearRange}
       />
       <Footer />
     </div>

@@ -1,5 +1,5 @@
 import "./letterContainer.css";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import ScrollAnimation from "../scrollanimate.jsx";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
@@ -7,13 +7,12 @@ import Cookies from "js-cookie";
 import { Alert } from "@mui/material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
-import {  Button, Pagination, Stack } from "@mui/material";
+import { Button, Pagination, Stack } from "@mui/material";
 import PaginationItem from "@mui/material/PaginationItem";
 
 // Function to remove diacritics from Arabic text
 const removeDiacritics = (text) => {
   if (!text) return "";
-  // Check if text is not null or undefined before calling normalize
   return text.normalize
     ? text.normalize("NFD").replace(/[\u064B-\u065F]/g, "")
     : text;
@@ -24,6 +23,7 @@ export default function LetterContainer({
   sortTag,
   collageTag,
   DepartmentTag,
+  yearRange,
 }) {
   const [letters, setLetters] = useState(null);
   const [loading, setLoading] = useState(true); // State to track loading status
@@ -41,11 +41,11 @@ export default function LetterContainer({
       }
       setError(null);
       return await response.json();
-      
     } catch (error) {
       setError(t("error1"));
     }
   }
+
   useEffect(() => {
     async function fetchData() {
       const thesisData = await getThesis();
@@ -56,14 +56,18 @@ export default function LetterContainer({
     }
     fetchData();
   }, [error]);
+
   const [t] = useTranslation();
 
   const lang = Cookies.get("i18next");
+
   // Function to filter letters based on tags
-  const filterLetters = () => {
+  const filterLetters = useMemo(() => {
+  
     if (!letters) {
       return [];
     }
+
     return letters
       .filter((letter) => {
         // If tags array is empty, return true for all letters
@@ -74,43 +78,48 @@ export default function LetterContainer({
         // Check if all tags are included in the letter properties
         return tags.every((tag) =>
           Object.values(letter).some((value) => {
-            // Convert numbers to strings for comparison
             const stringValue = String(value);
-            // Remove diacritics from both tag and value before comparison
             const normalizedTag = removeDiacritics(tag);
             const normalizedValue = removeDiacritics(stringValue);
 
             return normalizedValue
               .toLowerCase()
-              .includes(normalizedTag.toLowerCase()); // Changed here
+              .includes(normalizedTag.toLowerCase());
           })
         );
       })
       .filter((letter) => {
-        // Check if the letter matches any of the collage tags
-        const collageMatches =
-          collageTag.length > 0 && collageTag[0] !== "empty"
-            ? collageTag.some(
-                (tag) =>
-                  removeDiacritics(letter.collage).toLowerCase() ===
-                  removeDiacritics(tag).toLowerCase()
-              )
-            : true;
+        const isTagValid = (tags) => tags.length > 0 && tags[0] !== "empty";
 
-        // Check if the letter matches any of the department tags
-        const departmentMatches =
-          DepartmentTag.length > 0 && DepartmentTag[0] !== "empty"
-            ? DepartmentTag.some(
-                (tag) =>
-                  removeDiacritics(letter.department).toLowerCase() ===
-                  removeDiacritics(tag).toLowerCase()
-              )
-            : true;
+        const cleanString = (str) =>
+          removeDiacritics(str).toLowerCase().replace(/[_\s]/g, "");
 
-        // Return true if either collage or department match
+        const matchesTag = (value, tags) =>
+          tags.some((tag) => cleanString(value) === cleanString(tag));
+
+        const collageMatches = isTagValid(collageTag)
+          ? matchesTag(letter.collage, collageTag)
+          : true;
+        const departmentMatches = isTagValid(DepartmentTag)
+          ? matchesTag(letter.department, DepartmentTag)
+          : true;
+
         return collageMatches && departmentMatches;
+      })
+      .filter((letter) => {
+        if (
+          (yearRange.startYear === null || yearRange.startYear === "") &&
+          (yearRange.endYear === null || yearRange.endYear === "")
+        ) {
+          return letter;
+        } else {
+          return (
+            letter.year >= yearRange.startYear &&
+            letter.year <= yearRange.endYear
+          );
+        }
       });
-  };
+  }, [collageTag, DepartmentTag, letters, tags, yearRange]);
 
   // Function to sort letters based on sortTag
   const sortLetters = (lettersToSort) => {
@@ -137,32 +146,20 @@ export default function LetterContainer({
     return lettersToSort;
   };
 
-  const filteredLetters = filterLetters();
-  const sortedLetters = sortLetters(filteredLetters);
+  const sortedLetters = useMemo(() => {
+    return sortLetters([...filterLetters]);
+  }, [filterLetters]);
+
   const totalSections = Math.ceil(sortedLetters.length / lettersPerPage);
 
-  // Function to handle navigation to a specific section
-  const handleSectionClick = (section) => {
-    setCurrentPage(section);
-    // Scroll to the top of the page
+  const handlePageChange = (event, page) => {
+    setCurrentPage(page);
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
-
- const handlePageChange = (event, page) => {
-   setCurrentPage(page);
-   // Scroll to the top of the page
-   window.scrollTo({ top: 0, behavior: "smooth" });
- };
-
-  // Effect to reset current section when tags change
   useEffect(() => {
-    // Reset the current section to 1 whenever any of the filtering or sorting props change
     setCurrentPage(1);
   }, [tags, sortTag, collageTag, DepartmentTag]);
-
-  // Function to generate section buttons for the current group of sections
-
 
   return (
     <div className="main_contanier">
@@ -179,7 +176,7 @@ export default function LetterContainer({
           </Alert>
         </div>
       ) : null}
-      <h1 style={{ color: "#e0af14" }}>{t("thesis")}</h1>
+      <h1 style={{ color: "#3a73c2" }}>{t("thesis")}</h1>
       <div className="letter_contanier">
         {loading ? ( // Conditionally render loading message
           <div className="loading-message empty-message">Loading...</div>

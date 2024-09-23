@@ -116,7 +116,7 @@ export default function SelectedThesis({ ThesisId }) {
       ) : null}
       {loading || error ? (
         <Box sx={{ display: "flex" }}>
-          <CircularProgress style={{ color: "#e0af14" }} />
+          <CircularProgress style={{ color: "#3a73c2" }} />
         </Box>
       ) : viewPDF ? (
         <div className="Thesis1">

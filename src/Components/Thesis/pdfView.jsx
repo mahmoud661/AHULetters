@@ -54,7 +54,7 @@ useEffect(() => {
               {(props) => (
                 <button
                   style={{
-                    backgroundColor: props.isDisabled ? "#96750c6e" : "#e0af14",
+                    backgroundColor: props.isDisabled ? "#96750c6e" : "#3a73c2",
                     color: "white",
                     border: "none",
                     padding: "10px",
@@ -75,7 +75,7 @@ useEffect(() => {
               {(props) => (
                 <button
                   style={{
-                    backgroundColor: props.isDisabled ? "#96750c6e" : "#e0af14",
+                    backgroundColor: props.isDisabled ? "#96750c6e" : "#3a73c2",
                     color: "white",
                     border: "none",
                     padding: "10px",
@@ -94,7 +94,7 @@ useEffect(() => {
               {(props) => (
                 <button
                   style={{
-                    backgroundColor: props.isDisabled ? "#96750c6e" : "#e0af14",
+                    backgroundColor: props.isDisabled ? "#96750c6e" : "#3a73c2",
                     color: "white",
                     border: "none",
                     padding: "10px",
@@ -116,7 +116,7 @@ useEffect(() => {
               {(props) => (
                 <button
                   style={{
-                    backgroundColor: props.isDisabled ? "#96750c6e" : "#e0af14",
+                    backgroundColor: props.isDisabled ? "#96750c6e" : "#3a73c2",
                     color: "white",
                     border: "none",
                     padding: "10px",

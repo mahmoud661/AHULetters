@@ -35,7 +35,7 @@
     gap: 5px;
 }
 .d_title{
-    color: #e0af14;
+    color: #3a73c2;
     font-size: large;
 }
 .D_Btn {
@@ -55,13 +55,13 @@
 }
 
 .svgIcon {
-  fill: #e0af14;
+  fill: #3a73c2;
 }
 
 .icon2 {
   width: 18px;
   height: 5px;
-  border-bottom: 2px solid #e0af14;
+  border-bottom: 2px solid #3a73c2;
   border-left: 2px solid #be9613;
   border-right: 2px solid #c79c10;
 }
@@ -101,7 +101,7 @@
 }
 
 .D_Btn:hover {
-  background-color: #e0af14;
+  background-color: #3a73c2;
   transition-duration: .3s;
 }
 .hidden{

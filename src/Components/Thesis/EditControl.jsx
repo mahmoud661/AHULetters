@@ -192,7 +192,7 @@ export default function EditControl(props) {
       <Button
         onClick={props.handleUpdate}
         variant="contained"
-        style={{ backgroundColor: "#e0af14", color: "#ffffff" }}
+        style={{ backgroundColor: "#3a73c2", color: "#ffffff" }}
       >
         {t("Confirm")}
       </Button>

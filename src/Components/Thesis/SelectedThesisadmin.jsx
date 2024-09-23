@@ -236,7 +236,7 @@ export default function SelectedThesis({ ThesisId }) {
       ) : null}
       {loading || error ? (
         <Box sx={{ display: "flex" }}>
-          <CircularProgress style={{ color: "#e0af14" }} />
+          <CircularProgress style={{ color: "#3a73c2" }} />
         </Box>
       ) : viewPDF ? (
         <div className="Thesis1">
@@ -372,7 +372,7 @@ export default function SelectedThesis({ ThesisId }) {
               <Button
                 onClick={toggleEditMode}
                 variant="contained"
-                style={{ backgroundColor: "#e0af14", color: "#ffffff" }}
+                style={{ backgroundColor: "#3a73c2", color: "#ffffff" }}
               >
                 {t("Edit")}
               </Button>

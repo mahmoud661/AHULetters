@@ -27,10 +27,10 @@
 }
 .Dash_bar *:hover{
   cursor: pointer;
-  color: #e0af14;
+  color: #3a73c2;
 }
 .selected_Dash{
-  color: #e0af14;
+  color: #3a73c2;
 }
 .selected_Board{
   display: flex;
@@ -81,7 +81,7 @@
 .Entrance:hover {
   transform: scale(1.05);
   box-shadow: 0 0.5rem 1rem rgba(17, 24, 39, 0.1);
-  border: 1px solid #e0af14;
+  border: 1px solid #3a73c2;
 }
 .Entrance_list{
   display: flex;

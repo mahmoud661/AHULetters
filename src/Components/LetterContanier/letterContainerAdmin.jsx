@@ -1,5 +1,5 @@
 import "./letterContainer.css";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import ScrollAnimation from "../scrollanimate.jsx";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
@@ -9,6 +9,7 @@ import Cookies from "js-cookie";
 import { Alert, Button, Pagination, Stack } from "@mui/material";
 import PaginationItem from "@mui/material/PaginationItem";
 import { saveAs } from "file-saver";
+import CircularProgress from "@mui/material/CircularProgress";
 
 // Function to remove diacritics from Arabic text
 const removeDiacritics = (text) => {
@@ -24,6 +25,7 @@ export default function LetterContainerAdmin({
   sortTag,
   collageTag,
   DepartmentTag,
+  yearRange,
 }) {
   const [letters, setLetters] = useState(null);
   const [loading, setLoading] = useState(true); // State to track loading status
@@ -59,10 +61,12 @@ export default function LetterContainerAdmin({
 
   const lang = Cookies.get("i18next");
   // Function to filter letters based on tags
-  const filterLetters = () => {
+const filterLetters = useMemo(() => {
+  
     if (!letters) {
       return [];
     }
+
     return letters
       .filter((letter) => {
         // If tags array is empty, return true for all letters
@@ -73,67 +77,49 @@ export default function LetterContainerAdmin({
         // Check if all tags are included in the letter properties
         return tags.every((tag) =>
           Object.values(letter).some((value) => {
-            // Convert numbers to strings for comparison
             const stringValue = String(value);
-            // Remove diacritics from both tag and value before comparison
             const normalizedTag = removeDiacritics(tag);
             const normalizedValue = removeDiacritics(stringValue);
 
             return normalizedValue
               .toLowerCase()
-              .includes(normalizedTag.toLowerCase()); // Changed here
+              .includes(normalizedTag.toLowerCase());
           })
         );
       })
-   
       .filter((letter) => {
-        // Check if the letter matches any of the collage tags
-        const collageMatches =
-          collageTag.length > 0 && collageTag[0] !== "empty"
-            ? collageTag.some(
-                (tag) =>
-                  removeDiacritics(letter.collage).toLowerCase() ===
-                  removeDiacritics(tag).toLowerCase()
-              )
-            : true;
+        const isTagValid = (tags) => tags.length > 0 && tags[0] !== "empty";
 
-        // Check if the letter matches any of the department tags
-        const departmentMatches =
-          DepartmentTag.length > 0 && DepartmentTag[0] !== "empty"
-            ? DepartmentTag.some(
-                (tag) =>
-                  removeDiacritics(letter.department).toLowerCase() ===
-                  removeDiacritics(tag).toLowerCase()
-              )
-            : true;
+        const cleanString = (str) =>
+          removeDiacritics(str).toLowerCase().replace(/[_\s]/g, "");
 
-        // Return true if either collage or department match
+        const matchesTag = (value, tags) =>
+          tags.some((tag) => cleanString(value) === cleanString(tag));
+
+        const collageMatches = isTagValid(collageTag)
+          ? matchesTag(letter.collage, collageTag)
+          : true;
+        const departmentMatches = isTagValid(DepartmentTag)
+          ? matchesTag(letter.department, DepartmentTag)
+          : true;
+
         return collageMatches && departmentMatches;
+      })
+      .filter((letter) => {
+        if (
+          (yearRange.startYear === null || yearRange.startYear === "") &&
+          (yearRange.endYear === null || yearRange.endYear === "")
+        ) {
+          return letter;
+        } else {
+          return (
+            letter.year >= yearRange.startYear &&
+            letter.year <= yearRange.endYear
+          );
+        }
       });
+  }, [collageTag, DepartmentTag, letters, tags, yearRange]);
 
-  };
-    const exportToCSV = () => {
-      const json = filteredLetters;
-      if (json.length === 0) {
-        alert("No data to export");
-        return;
-      }
-
-      const fields = Object.keys(json[0]);
-      const replacer = (key, value) => (value === null ? "" : value);
-      let csv = json.map((row) => {
-        return fields
-          .map((fieldName) => JSON.stringify(row[fieldName], replacer))
-          .join(",");
-      });
-      csv.unshift(fields.join(","));
-      csv = csv.join("\r\n");
-
-      const blob = new Blob([`\uFEFF${csv}`], {
-        type: "text/csv;charset=utf-8;",
-      });
-      saveAs(blob, "reports.csv");
-    };
   // Function to sort letters based on sortTag
   const sortLetters = (lettersToSort) => {
     if (sortTag.includes("year")) {
@@ -159,8 +145,35 @@ export default function LetterContainerAdmin({
     return lettersToSort;
   };
 
-  const filteredLetters = filterLetters();
-  const sortedLetters = sortLetters(filteredLetters);
+
+  const exportToCSV = () => {
+    const json = filteredLetters;
+    if (json.length === 0) {
+      alert("No data to export");
+      return;
+    }
+
+    const fields = Object.keys(json[0]);
+    const replacer = (key, value) => (value === null ? "" : value);
+    let csv = json.map((row) => {
+      return fields
+        .map((fieldName) => JSON.stringify(row[fieldName], replacer))
+        .join(",");
+    });
+    csv.unshift(fields.join(","));
+    csv = csv.join("\r\n");
+
+    const blob = new Blob([`\uFEFF${csv}`], {
+      type: "text/csv;charset=utf-8;",
+    });
+    saveAs(blob, "reports.csv");
+  };
+
+
+  const filteredLetters = filterLetters;
+  const sortedLetters = useMemo(() => {
+    return sortLetters([...filterLetters]);
+  }, [filterLetters]);
   const totalSections = Math.ceil(sortedLetters.length / lettersPerPage);
 
   // Function to handle page change
@@ -174,8 +187,7 @@ export default function LetterContainerAdmin({
   useEffect(() => {
     // Reset the current page to 1 whenever any of the filtering or sorting props change
     setCurrentPage(1);
-  }, [tags, sortTag, collageTag, DepartmentTag]);
-
+  }, [tags, sortTag, collageTag, DepartmentTag, yearRange]);
   return (
     <div className="main_contanier">
       {error ? (
@@ -191,12 +203,12 @@ export default function LetterContainerAdmin({
           </Alert>
         </div>
       ) : null}
-      <h1 style={{ color: "#e0af14" }}>{t("thesis")}</h1>
-      <div style={{display:"flex" , flexWrap:"wrap" , gap:"10px"}}>
+      <h1 style={{ color: "#3a73c2" }}>{t("thesis")}</h1>
+      <div style={{ display: "flex", flexWrap: "wrap", gap: "10px" }}>
         <Link to={"/AddThesis"}>
           <Button
             variant="contained"
-            style={{ backgroundColor: "#e0af14", color: "#ffffff" }}
+            style={{ backgroundColor: "#3a73c2", color: "#ffffff" }}
           >
             {t("Add")}
           </Button>
@@ -204,7 +216,7 @@ export default function LetterContainerAdmin({
         <Link to={"/Dashboard"}>
           <Button
             variant="contained"
-            style={{ backgroundColor: "#e0af14", color: "#ffffff" }}
+            style={{ backgroundColor: "#3a73c2", color: "#ffffff" }}
           >
             {t("Dash board")}
           </Button>
@@ -214,9 +226,19 @@ export default function LetterContainerAdmin({
         </Button>
       </div>
 
+      {/* {tags.length > 0 ||
+      collageTag.length > 0 ||
+      DepartmentTag.length > 0 || 
+      (yearRange.startYear && yearRange.startYear.length) > 0  ? (
+        <div>found : {sortedLetters.length}</div>
+      ) : null} */}
+      
       <div className="letter_contanier">
         {loading ? ( // Conditionally render loading message
-          <div className="loading-message empty-message">Loading...</div>
+          <div className="loading-message empty-message">
+            {" "}
+            <CircularProgress />
+          </div>
         ) : sortedLetters.length === 0 ? (
           <div className="empty-message">{t("No thesis found")}</div>
         ) : (

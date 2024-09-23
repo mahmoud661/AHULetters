@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import "./NavBar.css";
-import LogoE from "../../Images/Logo.png";
+import LogoE from "../../Images/Logo3.jpg";
 import Burger from "./burgermenu";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
@@ -77,8 +77,8 @@ function Navbar(props) {
               rel="noopener noreferrer"
             >
               <img
-                height={"30px"}
-                width={"30px"}
+                height={"60px"}
+                width={"60px"}
                 className={`logo`}
                 src={LogoE}
                 alt="Alhussain bin Talal university"

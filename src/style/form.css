@@ -20,7 +20,7 @@
 }
 
 .login_title {
-  color: #e0af14;
+  color: #3a73c2;
   margin: 3rem 0;
   font-size: 2rem;
 }
@@ -36,7 +36,7 @@
 }
 
 .login_username {
-  border-bottom: 1px solid #e0af14;
+  border-bottom: 1px solid #3a73c2;
   transition: all 400ms;
 }
 
@@ -47,7 +47,7 @@
 }
 
 .login_password {
-  border-bottom: 1px solid #e0af14;
+  border-bottom: 1px solid #3a73c2;
   transition: all 400ms;
 }
 
@@ -61,7 +61,7 @@
   height: 3rem;
   width: 20rem;
   margin-top: 3rem;
-  background-color: #e0af14;
+  background-color: #3a73c2;
   border-radius: 0.5rem;
   border: none;
   font-size: 1.2rem;

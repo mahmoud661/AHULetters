@@ -1,5 +1,5 @@
 import "./letterContainer.css";
-import { useState, useEffect } from "react";
+import { useState, useEffect ,useMemo } from "react";
 import ScrollAnimation from "../scrollanimate.jsx";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
@@ -22,6 +22,7 @@ export default function LetterContainerEntry({
   sortTag,
   collageTag,
   DepartmentTag,
+  yearRange,
 }) {
   const [letters, setLetters] = useState(null);
   const [loading, setLoading] = useState(true); // State to track loading status
@@ -57,35 +58,63 @@ export default function LetterContainerEntry({
 
   const lang = Cookies.get("i18next");
   // Function to filter letters based on tags
-  const filterLetters = () => {
+  const filterLetters = useMemo(() => {
     if (!letters) {
       return [];
     }
-    return letters.filter((letter) => {
-      // Check if the letter matches any of the collage tags
-      const collageMatches =
-        collageTag.length > 0 && collageTag[0] !== "empty"
-          ? collageTag.some(
-              (tag) =>
-                removeDiacritics(letter.collage).toLowerCase() ===
-                removeDiacritics(tag).toLowerCase()
-            )
+
+    return letters
+      .filter((letter) => {
+        // If tags array is empty, return true for all letters
+        if (tags.length === 0) {
+          return true;
+        }
+
+        // Check if all tags are included in the letter properties
+        return tags.every((tag) =>
+          Object.values(letter).some((value) => {
+            const stringValue = String(value);
+            const normalizedTag = removeDiacritics(tag);
+            const normalizedValue = removeDiacritics(stringValue);
+
+            return normalizedValue
+              .toLowerCase()
+              .includes(normalizedTag.toLowerCase());
+          })
+        );
+      })
+      .filter((letter) => {
+        const isTagValid = (tags) => tags.length > 0 && tags[0] !== "empty";
+
+        const cleanString = (str) =>
+          removeDiacritics(str).toLowerCase().replace(/[_\s]/g, "");
+
+        const matchesTag = (value, tags) =>
+          tags.some((tag) => cleanString(value) === cleanString(tag));
+
+        const collageMatches = isTagValid(collageTag)
+          ? matchesTag(letter.collage, collageTag)
+          : true;
+        const departmentMatches = isTagValid(DepartmentTag)
+          ? matchesTag(letter.department, DepartmentTag)
           : true;
 
-      // Check if the letter matches any of the department tags
-      const departmentMatches =
-        DepartmentTag.length > 0 && DepartmentTag[0] !== "empty"
-          ? DepartmentTag.some(
-              (tag) =>
-                removeDiacritics(letter.department).toLowerCase() ===
-                removeDiacritics(tag).toLowerCase()
-            )
-          : true;
-
-      // Return true if either collage or department match
-      return collageMatches && departmentMatches;
-    });
-  };
+        return collageMatches && departmentMatches;
+      })
+      .filter((letter) => {
+        if (
+          (yearRange.startYear === null || yearRange.startYear === "") &&
+          (yearRange.endYear === null || yearRange.endYear === "")
+        ) {
+          return letter;
+        } else {
+          return (
+            letter.year >= yearRange.startYear &&
+            letter.year <= yearRange.endYear
+          );
+        }
+      });
+  }, [collageTag, DepartmentTag, letters, tags, yearRange]);
 
   // Function to sort letters based on sortTag
   const sortLetters = (lettersToSort) => {
@@ -112,8 +141,10 @@ export default function LetterContainerEntry({
     return lettersToSort;
   };
 
-  const filteredLetters = filterLetters();
-  const sortedLetters = sortLetters(filteredLetters);
+  const sortedLetters = useMemo(() => {
+    return sortLetters([...filterLetters]);
+  }, [filterLetters]);
+
   const totalSections = Math.ceil(sortedLetters.length / lettersPerPage);
 
   // Function to handle page change
@@ -144,11 +175,11 @@ export default function LetterContainerEntry({
           </Alert>
         </div>
       ) : null}
-      <h1 style={{ color: "#e0af14" }}>{t("thesis")}</h1>
+      <h1 style={{ color: "#3a73c2" }}>{t("thesis")}</h1>
       <Link to={"/AddThesis"}>
         <Button
           variant="contained"
-          style={{ backgroundColor: "#e0af14", color: "#ffffff" }}
+          style={{ backgroundColor: "#3a73c2", color: "#ffffff" }}
         >
           {t("Add")}
         </Button>
