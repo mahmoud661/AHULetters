@@ -48,7 +48,7 @@ function Home(props) {
         DepartmentTag={DepartmentTags}
         yearRange={yearRange}
       />
-      <Footer />
+    
     </div>
   );
 }

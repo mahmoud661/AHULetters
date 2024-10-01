@@ -25,10 +25,11 @@ body{
     font-family: Arial, Helvetica, sans-serif;
   font-optical-sizing: auto;
   font-weight: 350;
-
     overflow-x: hidden;
-    background: #f6f9fc;
     scroll-behavior: smooth;
+    /* convert the above to tailwend css */
+     
+
 }
 .error{
   position: fixed;

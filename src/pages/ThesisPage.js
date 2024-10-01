@@ -13,7 +13,7 @@ function Thesis(props) {
     <div>
       <Navbar updateAdmin={props.updateAdmin} />
       <SelectedThesis ThesisId={ThesisId} />
-      <Footer />
+    
     </div>
   );
 }

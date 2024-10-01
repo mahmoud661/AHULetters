@@ -1,0 +1,38 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+@layer components {
+
+  .bg-primary-light {
+    background-color: theme('colors.primary.light'); /* Use the theme colors */
+  }
+
+  .bg-primary-dark {
+    background-color: theme('colors.primary.dark'); /* Use the theme colors */
+  }
+
+  .text-primary {
+    color: theme('colors.primary.DEFAULT'); /* Text using primary color */
+  }
+
+
+
+  .bg-neutral-light {
+    background-color: theme('colors.neutral.light'); /* Use the theme colors */
+  }
+
+  .text-neutral {
+    color: theme('colors.neutral.DEFAULT'); /* Text using neutral color */
+  }
+
+ 
+  .dark .text-primary {
+    color: theme('colors.primary.DEFAULT'); /* Text using dark mode primary color */
+  }
+
+  .dark .text-neutral {
+    color: theme('colors.neutral.DEFAULT'); /* Use default neutral color in dark mode */
+  }
+}

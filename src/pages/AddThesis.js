@@ -10,7 +10,7 @@ function AddThesisPage(props) {
     <div>
       <Navbar updateAdmin={props.updateAdmin} />
       <AddThesis />
-      <Footer />
+    
     </div>
   );
 }

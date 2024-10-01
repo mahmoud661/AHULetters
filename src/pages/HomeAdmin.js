@@ -4,7 +4,6 @@ import LetterContainerAdmin from "../Components/LetterContanier/letterContainerA
 import Navbar from "../Components/NavBar/NavBar.jsx";
 import SearchBar from "../Components/Search/SearchBar.jsx";
 import Footer from "../Components/Footer/Footer.jsx";
-import { set } from "mongoose";
 
 function HomeAdmin(props) {
   const [tags, setTags] = useState([]);
@@ -46,7 +45,7 @@ function HomeAdmin(props) {
         DepartmentTag={DepartmentTags}
         yearRange={yearRange}
       />
-      <Footer />
+      
     </div>
   );
 }

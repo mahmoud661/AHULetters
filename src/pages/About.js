@@ -12,7 +12,7 @@ function About(props) {
     <div>
       <Navbar updateAdmin={props.updateAdmin} />
       <AboutCo />
-      <Footer />
+     
     </div>
   );
 }

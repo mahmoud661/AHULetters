@@ -13,7 +13,6 @@ function ThesisEntry(props) {
     <div>
       <Navbar updateAdmin={props.updateAdmin} />
       <SelectedThesisEntry ThesisId={ThesisId} />
-      <Footer />
     </div>
   );
 }

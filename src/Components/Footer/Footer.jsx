@@ -1,9 +1,18 @@
-import "./Footer.css"
+import "./Footer.css";
 import { useTranslation } from "react-i18next";
+
 export default function Footer() {
   const [t] = useTranslation();
-    return (
-      <footer>
+
+  return (
+    <div className="">
+      {/* Content Wrapper - grows to push the footer down */}
+      <div className="">
+        {/* Add your main content here */}
+      </div>
+
+      {/* Footer */}
+      <footer className="footer">
         <div className="top">
           <div className="pages"></div>
           <div className="AHU">
@@ -68,5 +77,6 @@ export default function Footer() {
           <div className="copyright">2024 Copyright &copy;</div>
         </div>
       </footer>
-    );
+    </div>
+  );
 }

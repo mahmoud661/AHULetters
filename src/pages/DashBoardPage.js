@@ -9,7 +9,7 @@ export default function DashBoardPage(props) {
         <div>
             <Navbar updateAdmin={props.updateAdmin} />
             <DashBoard />
-            <Footer />
+          
         </div>
     );
 }
